@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import NavLink from '../navigation-menu/NavLink.vue'
-import Sheet from '../sheet/Sheet.vue'
-import SheetContent from '../sheet/SheetContent.vue'
-import SheetTrigger from '../sheet/SheetTrigger.vue'
+import NavLink from '../navigation-menu/NavLink.vue';
+import Sheet from '../sheet/Sheet.vue';
+import SheetContent from '../sheet/SheetContent.vue';
+import SheetTrigger from '../sheet/SheetTrigger.vue';
 </script>
 
 <template>

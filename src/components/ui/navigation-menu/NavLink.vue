@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router';
 
-defineProps<{ to: string }>()
-const route = useRoute()
+defineProps<{ to: string }>();
+const route = useRoute();
 </script>
 
 <template>

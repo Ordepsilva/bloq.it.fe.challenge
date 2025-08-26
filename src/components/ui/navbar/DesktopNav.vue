@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import NavigationMenu from '../navigation-menu/NavigationMenu.vue'
-import NavigationMenuItem from '../navigation-menu/NavigationMenuItem.vue'
-import NavigationMenuList from '../navigation-menu/NavigationMenuList.vue'
-import NavLink from '../navigation-menu/NavLink.vue'
+import NavigationMenu from '../navigation-menu/NavigationMenu.vue';
+import NavigationMenuItem from '../navigation-menu/NavigationMenuItem.vue';
+import NavigationMenuList from '../navigation-menu/NavigationMenuList.vue';
+import NavLink from '../navigation-menu/NavLink.vue';
 </script>
 
 <template>
