@@ -31,7 +31,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     name: apiPokemon.name,
     height: apiPokemon.height,
     weight: apiPokemon.weight,
-    imgUrl: apiPokemon.sprites.front_default ?? '',
+    imgUrl: apiPokemon.sprites.other['official-artwork'].front_default ?? '',
     types: apiPokemon.types.map(
       (t: PokemonType) => t.type.name[0].toUpperCase() + t.type.name.slice(1),
     ),
