@@ -1,121 +1,20 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { Pokemon } from '@/models/pokemon';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import PokemonTable from '@/components/pokemon/PokemonTable.vue';
 import PokemonCardGrid from '@/components/pokemon/PokemonCardGrid.vue';
 import { useMediaQuery } from '@vueuse/core';
 import { LayoutGrid, Table } from 'lucide-vue-next';
+import { useQuery } from '@tanstack/vue-query';
+import { fetchPokemons } from '@/services/pokemon';
 
-const props = defineProps<{
-  pokemons: Pokemon[];
-}>();
+const { data, error, isLoading } = useQuery({
+  queryKey: ['pokemons', { limit: 20, offset: 0 }],
+  queryFn: () => fetchPokemons(20, 0),
+});
 
-//TODO replace with real data fetching
-const mockPokemons: Pokemon[] = [
-  {
-    id: 1,
-    name: 'bulbasaur',
-    imgUrl:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-    types: ['grass', 'poison'],
-    height: 7,
-    weight: 69,
-    stats: {
-      hp: 45,
-      attack: 49,
-      defense: 49,
-      specialAttack: 65,
-      specialDefense: 65,
-      speed: 45,
-    },
-  },
-  {
-    id: 1,
-    name: 'bulbasaur',
-    imgUrl:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-    types: ['grass', 'poison'],
-    height: 7,
-    weight: 69,
-    stats: {
-      hp: 45,
-      attack: 49,
-      defense: 49,
-      specialAttack: 65,
-      specialDefense: 65,
-      speed: 45,
-    },
-  },
-  {
-    id: 1,
-    name: 'bulbasaur',
-    imgUrl:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-    types: ['grass', 'poison'],
-    height: 7,
-    weight: 69,
-    stats: {
-      hp: 45,
-      attack: 49,
-      defense: 49,
-      specialAttack: 65,
-      specialDefense: 65,
-      speed: 45,
-    },
-  },
-  {
-    id: 1,
-    name: 'bulbasaur',
-    imgUrl:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-    types: ['grass', 'poison'],
-    height: 7,
-    weight: 69,
-    stats: {
-      hp: 45,
-      attack: 49,
-      defense: 49,
-      specialAttack: 65,
-      specialDefense: 65,
-      speed: 45,
-    },
-  },
-  {
-    id: 4,
-    name: 'charmander',
-    imgUrl:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
-    types: ['fire'],
-    height: 7,
-    weight: 69,
-    stats: {
-      hp: 45,
-      attack: 49,
-      defense: 49,
-      specialAttack: 65,
-      specialDefense: 65,
-      speed: 45,
-    },
-  },
-  {
-    id: 7,
-    name: 'squirtle',
-    imgUrl:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
-    types: ['water'],
-    height: 7,
-    weight: 69,
-    stats: {
-      hp: 45,
-      attack: 49,
-      defense: 49,
-      specialAttack: 65,
-      specialDefense: 65,
-      speed: 45,
-    },
-  },
-];
+const pokemons = computed(() => data?.value || []);
+
 const viewMode = ref<'table' | 'cards'>('table');
 const isMobile = useMediaQuery('(max-width: 640px)');
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
@@ -134,8 +33,13 @@ const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value)
       </ToggleGroup>
     </div>
     <div>
-      <PokemonTable v-if="effectiveView === 'table'" :pokemons="mockPokemons" />
-      <PokemonCardGrid v-else :pokemons="mockPokemons" />
+      <!-- Replace with Loading Component -->
+      <div v-if="isLoading">Loading....</div>
+      <div v-else-if="error">Error:{{ error.message }}</div>
+      <div v-else>
+        <PokemonTable v-if="effectiveView === 'table'" :pokemons="pokemons" />
+        <PokemonCardGrid v-else :pokemons="pokemons" />
+      </div>
     </div>
   </div>
 </template>

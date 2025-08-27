@@ -38,7 +38,11 @@ const router = useRouter();
       </TableHeader>
 
       <TableBody>
+        <TableRow v-if="props.pokemons.length === 0">
+          <TableCell colspan="12" class="text-center p-4"> No Pokemons Found. </TableCell>
+        </TableRow>
         <TableRow
+          v-else
           v-for="pokemon in props.pokemons"
           :key="pokemon.id"
           :class="`transition cursor-pointer  ${getPokemonCardHoverColor(pokemon.types[0])} bg-none border-b-[#e6e4db]`"
