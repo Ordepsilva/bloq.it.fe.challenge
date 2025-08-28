@@ -1,4 +1,3 @@
-// pokemon-colors.test.ts
 import {
   POKEMON_TYPE_COLORS,
   POKEMON_TYPE_GRADIENTS,
@@ -9,35 +8,12 @@ import {
   getPokemonCardColor,
   getPokemonCardHoverColor,
 } from '@/lib/models/colors';
-import type { PokemonType } from '@/lib/models/pokemon';
+import { POKEMON_TYPES } from '@/lib/models/pokemon';
 import { describe, expect, it } from 'vitest';
 
 describe('Pokemon colors mapping', () => {
-  const allTypes: PokemonType[] = [
-    'normal',
-    'fighting',
-    'flying',
-    'poison',
-    'ground',
-    'rock',
-    'bug',
-    'ghost',
-    'steel',
-    'fire',
-    'water',
-    'grass',
-    'electric',
-    'psychic',
-    'ice',
-    'dragon',
-    'dark',
-    'fairy',
-    'unknown',
-    'shadow',
-  ];
-
   it('should have a mapping for every type', () => {
-    allTypes.forEach((t) => {
+    POKEMON_TYPES.forEach((t) => {
       expect(POKEMON_TYPE_COLORS).toHaveProperty(t);
       expect(POKEMON_TYPE_GRADIENTS).toHaveProperty(t);
       expect(POKEMON_CARD_COLORS).toHaveProperty(t);

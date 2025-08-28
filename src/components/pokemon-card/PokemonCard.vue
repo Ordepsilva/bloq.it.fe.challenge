@@ -4,18 +4,22 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import type { Pokemon } from '@/lib/models/pokemon';
 import { getPokemonCardColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   pokemon: Pokemon;
 }>();
 
 const router = useRouter();
-const mainType = props.pokemon.types[0] ?? 'normal'; //computed
+
+const mainType = computed(() => {
+  return props.pokemon.types[0] ?? 'normal';
+});
 </script>
 
 <template>
   <Card
-    class="group relative m-1 h-[14rem] w-[18rem] cursor-pointer select-none overflow-hidden border-none rounded-2xl"
+    class="group relative m-1 h-[14rem] w-[18rem] cursor-pointer select-none overflow-hidden border-none rounded-2xl hover:scale-110 transition-transform duration-200"
     :class="getPokemonCardColor(mainType)"
     @click="router.push(`/pokemon/${pokemon.name}`)"
   >

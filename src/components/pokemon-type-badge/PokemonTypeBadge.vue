@@ -11,7 +11,7 @@ const typeColor = getPokemonTypeColor(props.type);
 
 <template>
   <Badge
-    class="bg-white/20 text-white/70 capitalize group-hover:bg-white/40 group-hover:text-white"
+    class="bg-white/20 text-white/70 capitalize group-hover:brightness-125 group-hover:text-white"
     :class="typeColor"
   >
     {{ props.type }}
