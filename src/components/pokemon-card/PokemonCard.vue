@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import type { Pokemon } from '@/models/pokemon';
-import { getPokemonCardColor } from '@/models/colors';
-import PokemonTypeBadge from './PokemonTypeBadge.vue';
+import type { Pokemon } from '@/lib/models/pokemon';
+import { getPokemonCardColor } from '@/lib/models/colors';
+import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
+
 const props = defineProps<{
   pokemon: Pokemon;
 }>();
 
 const router = useRouter();
-const mainType = props.pokemon.types[0] || 'normal';
+const mainType = props.pokemon.types[0] ?? 'normal'; //computed
 </script>
 
 <template>

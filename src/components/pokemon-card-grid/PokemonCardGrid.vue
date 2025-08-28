@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Pokemon } from '@/models/pokemon';
-import PokemonCard from './PokemonCard.vue';
+import type { Pokemon } from '@/lib/models/pokemon';
+import PokemonCard from '@/components/pokemon-card/PokemonCard.vue';
 
 const props = defineProps<{ pokemons: Pokemon[] }>();
 </script>

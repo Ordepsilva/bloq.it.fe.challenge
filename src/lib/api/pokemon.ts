@@ -1,9 +1,10 @@
-import { mapPokemon, type Pokemon } from '@/models/pokemon';
+import { PER_PAGE } from '@/lib/models/common';
+import { mapPokemon, type Pokemon } from '@/lib/models/pokemon';
 import { Pokedex } from 'pokeapi-js-wrapper';
 
 const p = new Pokedex({ cache: true, cacheImages: true });
 
-export async function fetchPokemons(limit = 20, offset = 0): Promise<Pokemon[]> {
+export async function getPokemons(limit = PER_PAGE, offset = 0): Promise<Pokemon[]> {
   const response = await p.getPokemonsList({ limit, offset });
 
   const detailedPokemons: Pokemon[] = await Promise.all(

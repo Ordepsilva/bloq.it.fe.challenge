@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge';
-import { getPokemonTypeColor } from '@/models/colors';
+import { getPokemonTypeColor } from '@/lib/models/colors';
 
 const props = defineProps<{
   type: string;

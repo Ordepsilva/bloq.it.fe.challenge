@@ -1,9 +1,8 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import PokemonTable from '../PokemonTable.vue';
-import type { Pokemon } from '@/models/pokemon';
+import type { Pokemon } from '@/lib/models/pokemon';
+import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
 
-// mock vue-router
 const mockPush = vi.fn();
 vi.mock('vue-router', () => ({
   useRouter: () => ({

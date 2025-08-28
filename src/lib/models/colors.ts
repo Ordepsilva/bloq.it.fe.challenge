@@ -1,24 +1,4 @@
-export type PokemonType =
-  | 'normal'
-  | 'fighting'
-  | 'flying'
-  | 'poison'
-  | 'ground'
-  | 'rock'
-  | 'bug'
-  | 'ghost'
-  | 'steel'
-  | 'fire'
-  | 'water'
-  | 'grass'
-  | 'electric'
-  | 'psychic'
-  | 'ice'
-  | 'dragon'
-  | 'dark'
-  | 'fairy'
-  | 'unknown'
-  | 'shadow';
+import type { PokemonType } from '@/lib/models/pokemon';
 
 export const POKEMON_TYPE_COLORS: Record<PokemonType, string> = {
   normal: 'bg-neutral-600',

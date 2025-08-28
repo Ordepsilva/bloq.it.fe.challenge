@@ -1,30 +1,47 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import PokemonTable from '@/components/pokemon/PokemonTable.vue';
-import PokemonCardGrid from '@/components/pokemon/PokemonCardGrid.vue';
-import { useMediaQuery } from '@vueuse/core';
+import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
+import PokemonCardGrid from '@/components/pokemon-card-grid/PokemonCardGrid.vue';
 import { LayoutGrid, Table } from 'lucide-vue-next';
-import { useQuery } from '@tanstack/vue-query';
-import { fetchPokemons, getPokemonsCount } from '@/services/pokemon';
-import Pagination from '@/components/Pagination.vue';
+import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination.vue';
+import { useIsMobile } from '@/composables/useIsMobile';
+import { useGetPokemons, useGetPokemonsCount } from '@/lib/queries/pokemons';
+import { useInvalidateQuery } from '@/lib/queries/useInvalidateQuery';
 
 const currentPage = ref(1);
-const perPage = 10;
-const pokemons = computed(() => data?.value || []);
-const totalCount = ref(0);
 const viewMode = ref<'table' | 'cards'>('table');
-const isMobile = useMediaQuery('(max-width: 640px)');
+
+const perPage = 10;
+
+const isMobile = useIsMobile();
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 
-const { data, error, isLoading } = useQuery({
-  queryKey: ['pokemons', currentPage],
-  queryFn: () => fetchPokemons(perPage, (currentPage.value - 1) * perPage),
+const { invalidate: invalidatePokemons } = useInvalidateQuery('pokemons');
+const {
+  data: pokemons,
+  error,
+  isLoading,
+  isError: isErrorPokemons,
+} = useGetPokemons(currentPage.value);
+
+const { data: count, isError: isErrorCount } = useGetPokemonsCount();
+
+watchEffect(() => {
+  if (isErrorPokemons.value) {
+    //throw toast error
+    //return in every if
+    console.error('Error fetching pokemons:', error.value);
+  }
+  if (isErrorCount.value) {
+    console.error('Error fetching pokemons count');
+  }
 });
 
-onMounted(async () => {
-  totalCount.value = await getPokemonsCount();
-});
+function handlePageUpdate(page: number) {
+  currentPage.value = page;
+  invalidatePokemons();
+}
 </script>
 
 <template>
@@ -42,17 +59,17 @@ onMounted(async () => {
     <div>
       <!-- Replace with Loading Component -->
       <div v-if="isLoading">Loading....</div>
-      <div v-else-if="error">Error:{{ error.message }}</div>
+      <div v-else-if="isErrorPokemons">Error:{{ 'Failed to get Pokemons' }}</div>
       <div v-else>
-        <PokemonTable v-if="effectiveView === 'table'" :pokemons="pokemons" />
-        <PokemonCardGrid v-else :pokemons="pokemons" />
-        <Pagination
+        <PokemonTable v-if="effectiveView === 'table'" :pokemons="pokemons ?? []" />
+        <PokemonCardGrid v-else :pokemons="pokemons ?? []" />
+        <PokemonPagination
           class="mt-2"
           :loading="isLoading"
           :page="currentPage"
           :per-page="perPage"
-          :total="totalCount"
-          @update:page="currentPage = $event"
+          :total="count ?? 0"
+          @update:page="handlePageUpdate"
         />
       </div>
     </div>

@@ -7,10 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { Pokemon } from '@/models/pokemon';
+import type { Pokemon } from '@/lib/models/pokemon';
 import { useRouter } from 'vue-router';
-import { getPokemonCardHoverColor } from '@/models/colors';
-import PokemonTypeBadge from './PokemonTypeBadge.vue';
+import { getPokemonCardHoverColor } from '@/lib/models/colors';
+import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 const props = defineProps<{
   pokemons: Pokemon[];
 }>();

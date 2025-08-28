@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect } from 'vitest';
-import PokemonTypeBadge from '@/components/pokemon/PokemonTypeBadge.vue';
-import { getPokemonTypeColor } from '@/models/colors';
+import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
+import { getPokemonTypeColor } from '@/lib/models/colors';
 
 describe('PokemonTypeBadge', () => {
   it('renders the type text', () => {
