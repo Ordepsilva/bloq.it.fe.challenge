@@ -20,6 +20,28 @@ export type PokemonStats = {
   speed: number;
 };
 
+export type PokemonTypes =
+  | 'normal'
+  | 'fighting'
+  | 'flying'
+  | 'poison'
+  | 'ground'
+  | 'rock'
+  | 'bug'
+  | 'ghost'
+  | 'steel'
+  | 'fire'
+  | 'water'
+  | 'grass'
+  | 'electric'
+  | 'psychic'
+  | 'ice'
+  | 'dragon'
+  | 'dark'
+  | 'fairy'
+  | 'unknown'
+  | 'shadow';
+
 export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
   const statMap: Record<string, number> = {};
   for (const statElement of apiPokemon.stats) {
