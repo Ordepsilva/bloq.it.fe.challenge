@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import NavLink from '@/components/ui/navigation-menu/NavLink.vue';
 </script>
 
 <template>
   <Sheet>
     <SheetTrigger as-child>
       <Button
-        class="focus:outline-none focus:ring-2 focus:ring-gray-600"
+        variant="ghost"
+        size="icon"
+        class="focus:outline-none focus:ring-2 focus:ring-blue-400 hover:bg-blue-100 active:bg-blue-200 transition"
         aria-label="Open navigation menu"
       >
         <!-- Hamburger Icon -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
+          class="!h-10 !w-10 text-gray-700"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
