@@ -20,3 +20,8 @@ export async function getPokemonsCount(): Promise<number> {
   const response = await p.getPokemonsList({ limit: 1, offset: 0 });
   return response.count;
 }
+
+export async function getPokemonByNameOrId(pokemonIDOrName: number | string): Promise<Pokemon> {
+  const response = await p.getPokemonByName(pokemonIDOrName);
+  return mapPokemon(response);
+}

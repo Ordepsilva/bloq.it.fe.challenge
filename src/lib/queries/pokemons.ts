@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/vue-query';
 import { PER_PAGE } from '@/lib/constants';
-import { getPokemons, getPokemonsCount } from '@/lib/api/pokemon';
+import { getPokemonByNameOrId, getPokemons, getPokemonsCount } from '@/lib/api/pokemon';
 import type { Ref } from 'vue';
+import { usePokedexStore } from '@/stores/pokedex';
+import type { Pokemon } from '../models/pokemon';
 
 export function useGetPokemons(currentPage: Ref<number>) {
   return useQuery({
@@ -14,5 +16,21 @@ export function useGetPokemonsCount() {
   return useQuery({
     queryKey: ['pokemonsCount'],
     queryFn: () => getPokemonsCount(),
+  });
+}
+
+export function useGetPokemon(idOrName: number | string) {
+  const store = usePokedexStore();
+
+  return useQuery<Pokemon>({
+    queryKey: ['pokemon', idOrName],
+    queryFn: async () => {
+      const numericId = Number(idOrName);
+      if (!isNaN(numericId) && store.caughtPokemons.has(numericId)) {
+        return store.caughtPokemons.get(numericId)!;
+      }
+
+      return await getPokemonByNameOrId(idOrName);
+    },
   });
 }
