@@ -8,8 +8,8 @@ const route = useRoute();
 <template>
   <RouterLink
     :to="to"
-    class="transition duration-300 hover:text-primary"
-    :class="{ 'text-primary': route.path === to }"
+    class="transition-colors duration-200 px-3 py-2 rounded"
+    :class="[route.path === to ? 'text-primary  underline' : 'text-gray-700 hover:text-primary']"
   >
     <slot />
   </RouterLink>
