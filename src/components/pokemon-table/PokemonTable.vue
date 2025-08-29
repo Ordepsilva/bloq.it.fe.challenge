@@ -11,9 +11,19 @@ import type { Pokemon } from '@/lib/models/pokemon';
 import { useRouter } from 'vue-router';
 import { getPokemonCardHoverColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
+import { usePokedexStore } from '@/stores/pokedex';
+import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
+const pokedexStore = usePokedexStore();
 const props = defineProps<{
   pokemons: Pokemon[];
 }>();
+
+function isCaught(pokemon: Pokemon) {
+  return pokedexStore.caughtPokemons.has(pokemon.id);
+}
+function toggleCaught(pokemon: Pokemon) {
+  if (pokemon) pokedexStore.toggleCaught(pokemon);
+}
 const router = useRouter();
 </script>
 
@@ -23,7 +33,8 @@ const router = useRouter();
       <TableHeader class="hover:bg-none">
         <TableRow class="border-b-[#e6e4db] bg-muted-foreground/10">
           <TableHead class="w-[80px]">Image</TableHead>
-          <TableHead>Name</TableHead>
+          <TableHead class="w-12"></TableHead>
+          <TableHead class="min-w-auto">Name</TableHead>
           <TableHead>ID</TableHead>
           <TableHead>Type</TableHead>
           <TableHead>Height</TableHead>
@@ -46,13 +57,20 @@ const router = useRouter();
           v-for="pokemon in props.pokemons"
           :key="pokemon.id"
           :class="`transition cursor-pointer  ${getPokemonCardHoverColor(pokemon.types[0])} bg-none border-b-[#e6e4db]`"
-          @click="router.push(`/pokemon/${pokemon.name}`)"
+          @click="router.push(`/pokemon/${pokemon.id}`)"
         >
           <TableCell>
             <img :src="pokemon.imgUrl" :alt="pokemon.name" class="h-12 w-12 object-contain" />
           </TableCell>
 
-          <TableCell class="capitalize font-semibold">
+          <TableCell class="w-12">
+            <PokeballButton
+              :caught="isCaught(pokemon)"
+              size="w-12 h-12"
+              @click="toggleCaught(pokemon)"
+            />
+          </TableCell>
+          <TableCell class="capitalize font-semibold min-w-auto">
             {{ pokemon.name }}
           </TableCell>
 
