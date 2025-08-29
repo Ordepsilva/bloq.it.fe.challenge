@@ -38,8 +38,7 @@ function handlePageUpdate(page: number) {
 
 <template>
   <div class="px-4 py-3 space-y-4">
-    <div class="flex justify-between items-center">
-      <h2>All Pokemons</h2>
+    <div class="flex justify-end items-center">
       <ViewModeToggle
         v-if="!isMobile"
         v-model="viewMode"

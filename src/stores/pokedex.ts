@@ -1,15 +1,23 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import type { Pokemon, PokemonCaughtEntry, PokemonType } from '@/lib/models/pokemon';
 import type { SortingColumns, SortingDirections } from '@/lib/models/common';
+import { PER_PAGE } from '@/lib/constants';
 
 export const usePokedexStore = defineStore('pokedex', () => {
   const caughtPokemons = ref<Map<number, PokemonCaughtEntry>>(new Map());
+
+  const currentPage = ref(1);
+  const itemsPerPage = ref(PER_PAGE);
 
   const searchName = ref<string>('');
   const selectedType = ref<PokemonType | null>(null);
   const sortBy = ref<SortingColumns>('id');
   const sortDir = ref<SortingDirections>('asc');
+
+  watch([searchName, selectedType], () => {
+    currentPage.value = 1;
+  });
 
   const activeFilterCount = computed(() => {
     let count = 0;
@@ -45,6 +53,15 @@ export const usePokedexStore = defineStore('pokedex', () => {
     }
   }
 
+  function setPage(page: number) {
+    currentPage.value = page;
+  }
+
+  function setItemsPerPage(count: number) {
+    itemsPerPage.value = count;
+    currentPage.value = 1;
+  }
+
   const filteredPokemons = computed(() => {
     let result = Array.from(caughtPokemons.value.values());
 
@@ -66,6 +83,16 @@ export const usePokedexStore = defineStore('pokedex', () => {
     return result;
   });
 
+  const paginatedPokemons = computed(() => {
+    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+    const endIndex = startIndex + itemsPerPage.value;
+    return filteredPokemons.value.slice(startIndex, endIndex);
+  });
+
+  const totalPages = computed(() => {
+    return Math.ceil(filteredPokemons.value.length / itemsPerPage.value);
+  });
+
   return {
     caughtPokemons,
     searchName,
@@ -76,6 +103,12 @@ export const usePokedexStore = defineStore('pokedex', () => {
     addNote,
     removeNote,
     filteredPokemons,
+    paginatedPokemons,
     activeFilterCount,
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    setPage,
+    setItemsPerPage,
   };
 });
