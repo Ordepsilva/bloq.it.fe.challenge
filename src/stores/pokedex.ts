@@ -1,0 +1,81 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import type { Pokemon, PokemonCaughtEntry, PokemonType } from '@/lib/models/pokemon';
+import type { SortingColumns, SortingDirections } from '@/lib/models/common';
+
+export const usePokedexStore = defineStore('pokedex', () => {
+  const caughtPokemons = ref<Map<number, PokemonCaughtEntry>>(new Map());
+
+  const searchName = ref<string>('');
+  const selectedType = ref<PokemonType | null>(null);
+  const sortBy = ref<SortingColumns>('id');
+  const sortDir = ref<SortingDirections>('asc');
+
+  const activeFilterCount = computed(() => {
+    let count = 0;
+    if (searchName.value !== '') count++;
+    if (selectedType.value !== null) count++;
+    if (sortBy.value !== 'id') count++;
+    if (sortDir.value !== 'asc') count++;
+    return count;
+  });
+
+  function toggleCaught(pokemon: Pokemon) {
+    if (caughtPokemons.value.has(pokemon.id)) {
+      caughtPokemons.value.delete(pokemon.id);
+      return;
+    }
+    caughtPokemons.value.set(pokemon.id, {
+      ...pokemon,
+      notes: [],
+      timestamp: Date.now(),
+    });
+  }
+
+  function addNote(id: number, note: string) {
+    const entry = caughtPokemons.value.get(id);
+    if (entry) entry.notes.push(note);
+  }
+
+  function removeNote(id: number, index: number) {
+    const entry = caughtPokemons.value.get(id);
+    if (entry) {
+      entry.notes.splice(index, 1);
+      caughtPokemons.value.set(id, { ...entry });
+    }
+  }
+
+  const filteredPokemons = computed(() => {
+    let result = Array.from(caughtPokemons.value.values());
+
+    if (searchName.value) {
+      result = result.filter((e) => e.name.toLowerCase().includes(searchName.value.toLowerCase()));
+    }
+
+    if (selectedType.value) {
+      result = result.filter((e) => e.types.includes(selectedType.value as PokemonType));
+    }
+
+    result.sort((a, b) => {
+      const dir = sortDir.value === 'asc' ? 1 : -1;
+      if (a[sortBy.value] < b[sortBy.value]) return -1 * dir;
+      if (a[sortBy.value] > b[sortBy.value]) return 1 * dir;
+      return 0;
+    });
+
+    return result;
+  });
+
+  return {
+    caughtPokemons,
+    searchName,
+    selectedType,
+    sortBy,
+    sortDir,
+    toggleCaught,
+    addNote,
+    removeNote,
+    filteredPokemons,
+    activeFilterCount,
+  };
+});
