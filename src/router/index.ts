@@ -8,6 +8,17 @@ const router = createRouter({
       name: 'home',
       component: () => import('@/views/PokemonsView.vue'),
     },
+    { path: '/pokedex', name: 'pokedex', component: () => import('@/views/PokedexView.vue') },
+    {
+      path: '/pokemon/:id',
+      name: 'pokemon-detail',
+      component: () => import('@/views/PokemonDetailsView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue'),
+    },
   ],
 });
 
