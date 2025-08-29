@@ -11,19 +11,13 @@ import type { Pokemon } from '@/lib/models/pokemon';
 import { useRouter } from 'vue-router';
 import { getPokemonCardHoverColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
-import { usePokedexStore } from '@/stores/pokedex';
+import { usePokemonCaught } from '@/composables/usePokemonCaught';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
-const pokedexStore = usePokedexStore();
 const props = defineProps<{
   pokemons: Pokemon[];
 }>();
 
-function isCaught(pokemon: Pokemon) {
-  return pokedexStore.caughtPokemons.has(pokemon.id);
-}
-function toggleCaught(pokemon: Pokemon) {
-  if (pokemon) pokedexStore.toggleCaught(pokemon);
-}
+const { isCaught, toggleCaught } = usePokemonCaught();
 const router = useRouter();
 </script>
 

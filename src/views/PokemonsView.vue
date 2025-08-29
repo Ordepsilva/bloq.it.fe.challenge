@@ -8,9 +8,10 @@ import { useGetPokemons, useGetPokemonsCount } from '@/lib/queries/pokemons';
 import { useInvalidateQuery } from '@/lib/queries/useInvalidateQuery';
 import { PER_PAGE } from '@/lib/constants';
 import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
+import type { ViewModes } from '@/lib/models/common';
 
 const currentPage = ref(1);
-const viewMode = ref<'table' | 'cards'>('table');
+const viewMode = ref<ViewModes>('table');
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 
 const isMobile = useIsMobile();
