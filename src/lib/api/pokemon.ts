@@ -1,6 +1,6 @@
-import { PER_PAGE } from '@/lib/models/common';
 import { mapPokemon, type Pokemon } from '@/lib/models/pokemon';
 import { Pokedex } from 'pokeapi-js-wrapper';
+import { PER_PAGE } from '../constants';
 
 const p = new Pokedex({ cache: true, cacheImages: true });
 

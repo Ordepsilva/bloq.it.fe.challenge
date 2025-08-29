@@ -35,7 +35,7 @@ const mainType = computed(() => {
     />
 
     <CardHeader class="flex flex-row relative items-center z-10">
-      <span class="font-mono text-4xl text-white/30"> #{{ pokemon.id }} </span>
+      <span class="font-mono text-4xl text-white/50"> #{{ pokemon.id }} </span>
       <CardTitle class="capitalize text-white/80 group-hover:text-white flex">
         {{ pokemon.name }}
       </CardTitle>

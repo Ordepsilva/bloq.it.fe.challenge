@@ -1,4 +1,8 @@
-export type SortingColumns = 'id' | 'name' | 'height' | 'weight' | 'createdDate';
-export type SortingDirections = 'asc' | 'desc';
+import type { PokemonCaughtEntry } from '@/lib/models/pokemon';
 
-export const PER_PAGE = 10;
+export type SortingDirections = 'asc' | 'desc';
+export type SortingColumns = keyof Pick<
+  PokemonCaughtEntry,
+  'id' | 'name' | 'height' | 'weight' | 'timestamp'
+>;
+export type ViewModes = 'cards' | 'table';

@@ -1,30 +1,22 @@
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
 import PokemonCardGrid from '@/components/pokemon-card-grid/PokemonCardGrid.vue';
-import { LayoutGrid, Table } from 'lucide-vue-next';
 import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination.vue';
 import { useIsMobile } from '@/composables/useIsMobile';
 import { useGetPokemons, useGetPokemonsCount } from '@/lib/queries/pokemons';
 import { useInvalidateQuery } from '@/lib/queries/useInvalidateQuery';
+import { PER_PAGE } from '@/lib/constants';
+import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
 
 const currentPage = ref(1);
 const viewMode = ref<'table' | 'cards'>('table');
-
-const perPage = 10;
-
-const isMobile = useIsMobile();
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 
-const { invalidate: invalidatePokemons } = useInvalidateQuery('pokemons');
-const {
-  data: pokemons,
-  error,
-  isLoading,
-  isError: isErrorPokemons,
-} = useGetPokemons(currentPage.value);
+const isMobile = useIsMobile();
 
+const { invalidate: invalidatePokemons } = useInvalidateQuery('pokemons');
+const { data: pokemons, error, isLoading, isError: isErrorPokemons } = useGetPokemons(currentPage);
 const { data: count, isError: isErrorCount } = useGetPokemonsCount();
 
 watchEffect(() => {
@@ -46,15 +38,13 @@ function handlePageUpdate(page: number) {
 
 <template>
   <div class="px-4 py-3 space-y-4">
-    <div class="flex justify-end">
-      <ToggleGroup v-if="!isMobile" v-model="viewMode" type="single" class="flex">
-        <ToggleGroupItem value="table" class="p-2 rounded-md hover:bg-gray-200">
-          <Table class="h-5 w-5" />
-        </ToggleGroupItem>
-        <ToggleGroupItem value="cards" class="p-2 rounded-md hover:bg-gray-200">
-          <LayoutGrid class="h-5 w-5" />
-        </ToggleGroupItem>
-      </ToggleGroup>
+    <div class="flex justify-between items-center">
+      <h2>All Pokemons</h2>
+      <ViewModeToggle
+        v-if="!isMobile"
+        v-model="viewMode"
+        :disabled="isLoading || isErrorPokemons"
+      />
     </div>
     <div>
       <!-- Replace with Loading Component -->
@@ -67,7 +57,7 @@ function handlePageUpdate(page: number) {
           class="mt-2"
           :loading="isLoading"
           :page="currentPage"
-          :per-page="perPage"
+          :per-page="PER_PAGE"
           :total="count ?? 0"
           @update:page="handlePageUpdate"
         />

@@ -8,7 +8,6 @@ export type Pokemon = {
   height: number;
   weight: number;
   stats: PokemonStats;
-  captured?: boolean;
 };
 
 export type PokemonStats = {
@@ -19,6 +18,8 @@ export type PokemonStats = {
   specialDefense: number;
   speed: number;
 };
+
+export type PokemonCaughtEntry = Pokemon & { notes: string[]; timestamp: number };
 
 export const POKEMON_TYPES = [
   'normal',
@@ -49,30 +50,41 @@ export function isPokemonType(value: string): value is PokemonType {
   return POKEMON_TYPES.includes(value as PokemonType);
 }
 
-export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
-  const statMap: Record<string, number> = {};
-  for (const statElement of apiPokemon.stats) {
-    statMap[statElement.stat.name] = statElement.base_stat;
-  }
-  //use pokemonStats to be type safer
+const STAT_NAME_MAP: Record<string, keyof PokemonStats> = {
+  hp: 'hp',
+  attack: 'attack',
+  defense: 'defense',
+  'special-attack': 'specialAttack',
+  'special-defense': 'specialDefense',
+  speed: 'speed',
+};
 
-  //destructure
+export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
+  const { id, name, height, weight, sprites, types, stats } = apiPokemon;
+
+  const mappedStats: PokemonStats = {
+    hp: 0,
+    attack: 0,
+    defense: 0,
+    specialAttack: 0,
+    specialDefense: 0,
+    speed: 0,
+  };
+
+  for (const statElement of stats) {
+    const mappedKey = STAT_NAME_MAP[statElement.stat.name];
+    if (mappedKey) {
+      mappedStats[mappedKey] = statElement.base_stat;
+    }
+  }
+
   return {
-    id: apiPokemon.id,
-    name: apiPokemon.name,
-    height: apiPokemon.height,
-    weight: apiPokemon.weight,
-    imgUrl: apiPokemon.sprites.other['official-artwork'].front_default ?? '',
-    types: apiPokemon.types.map((t: APIPokemonType) =>
-      isPokemonType(t.type.name) ? t.type.name : 'unknown',
-    ),
-    stats: {
-      hp: statMap['hp'] ?? 0,
-      attack: statMap['attack'] ?? 0,
-      defense: statMap['defense'] ?? 0,
-      specialAttack: statMap['special-attack'] ?? 0,
-      specialDefense: statMap['special-defense'] ?? 0,
-      speed: statMap['speed'] ?? 0,
-    },
+    id,
+    name,
+    height,
+    weight,
+    imgUrl: sprites.other['official-artwork'].front_default ?? '',
+    types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),
+    stats: mappedStats,
   };
 }
