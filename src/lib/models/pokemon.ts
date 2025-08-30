@@ -8,6 +8,7 @@ export type Pokemon = {
   height: number;
   weight: number;
   stats: PokemonStats;
+  base_experience: number;
 };
 
 export type PokemonStats = {
@@ -17,6 +18,17 @@ export type PokemonStats = {
   specialAttack: number;
   specialDefense: number;
   speed: number;
+};
+
+export type PokemonAbilities = {
+  name: string;
+  effect: string;
+}[];
+
+export type PokemonEvolution = {
+  id: number;
+  name: string;
+  imgUrl: string;
 };
 
 export type PokemonCaughtEntry = Pokemon & { notes: string[]; timestamp: number };
@@ -60,7 +72,7 @@ const STAT_NAME_MAP: Record<string, keyof PokemonStats> = {
 };
 
 export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
-  const { id, name, height, weight, sprites, types, stats } = apiPokemon;
+  const { id, name, height, weight, sprites, types, stats, base_experience } = apiPokemon;
 
   const mappedStats: PokemonStats = {
     hp: 0,
@@ -83,6 +95,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     name,
     height,
     weight,
+    base_experience: base_experience ?? 0,
     imgUrl: sprites.other['official-artwork'].front_default ?? '',
     types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),
     stats: mappedStats,

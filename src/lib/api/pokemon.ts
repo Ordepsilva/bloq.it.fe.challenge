@@ -1,5 +1,5 @@
-import { mapPokemon, type Pokemon } from '@/lib/models/pokemon';
-import { Pokedex } from 'pokeapi-js-wrapper';
+import { mapPokemon, type Pokemon, type PokemonEvolution } from '@/lib/models/pokemon';
+import { Pokedex, type Chain } from 'pokeapi-js-wrapper';
 import { PER_PAGE } from '../constants';
 
 const p = new Pokedex({ cache: true, cacheImages: true });
@@ -24,4 +24,31 @@ export async function getPokemonsCount(): Promise<number> {
 export async function getPokemonByNameOrId(pokemonIDOrName: number | string): Promise<Pokemon> {
   const response = await p.getPokemonByName(pokemonIDOrName);
   return mapPokemon(response);
+}
+
+function extractEvolutionNames(chain: Chain): string[] {
+  const evolutionNames = [chain.species.name];
+  for (const evo of chain.evolves_to) {
+    evolutionNames.push(...extractEvolutionNames(evo));
+  }
+  return evolutionNames;
+}
+
+export async function getPokemonEvolutions(pokemonId: number): Promise<PokemonEvolution[]> {
+  const response = await p.getEvolutionChainById(pokemonId);
+
+  const evolutionNames = extractEvolutionNames(response.chain);
+
+  const evolutions: PokemonEvolution[] = await Promise.all(
+    evolutionNames.map(async (name) => {
+      const currentEvoPoke = await getPokemonByNameOrId(name);
+      return {
+        id: currentEvoPoke.id,
+        name: currentEvoPoke.name,
+        imgUrl: currentEvoPoke.imgUrl,
+      };
+    }),
+  );
+
+  return evolutions;
 }
