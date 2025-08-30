@@ -35,17 +35,27 @@ function extractEvolutionNames(chain: Chain): string[] {
 }
 
 export async function getPokemonEvolutions(pokemonId: number): Promise<PokemonEvolution[]> {
-  const response = await p.getEvolutionChainById(pokemonId);
+  const pokemonSpecies = await p.getPokemonSpeciesByName(pokemonId);
+  const evolutionIdRegex = /evolution-chain\/(\d+)\/$/;
+  const evolutionId = pokemonSpecies?.evolution_chain?.url?.match?.(evolutionIdRegex)?.[1] || null;
 
-  const evolutionNames = extractEvolutionNames(response.chain);
+  if (!evolutionId) {
+    throw new Error('Evolution chain not found');
+  }
+
+  const { chain } = await p.getEvolutionChainById(Number(evolutionId));
+
+  console.log(chain);
+
+  const evolutionNames = extractEvolutionNames(chain);
 
   const evolutions: PokemonEvolution[] = await Promise.all(
-    evolutionNames.map(async (name) => {
-      const currentEvoPoke = await getPokemonByNameOrId(name);
+    evolutionNames.map(async (pokemonName) => {
+      const { id, name, imgUrl } = await getPokemonByNameOrId(pokemonName);
       return {
-        id: currentEvoPoke.id,
-        name: currentEvoPoke.name,
-        imgUrl: currentEvoPoke.imgUrl,
+        id,
+        name,
+        imgUrl,
       };
     }),
   );
