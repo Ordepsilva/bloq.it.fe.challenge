@@ -1,15 +1,12 @@
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export function usePaginationQuery(defaultPage = 1) {
   const route = useRoute();
   const router = useRouter();
-  const currentPage = ref(defaultPage);
 
-  onMounted(() => {
-    const pageFromQuery = parseInt(route.query.page as string);
-    currentPage.value = !isNaN(pageFromQuery) && pageFromQuery > 0 ? pageFromQuery : defaultPage;
-  });
+  const pageFromQuery = parseInt(route.query.page as string);
+  const currentPage = ref(!isNaN(pageFromQuery) && pageFromQuery > 0 ? pageFromQuery : defaultPage);
 
   watch(currentPage, (newPage) => {
     router.replace({

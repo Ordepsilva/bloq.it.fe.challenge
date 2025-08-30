@@ -3,7 +3,7 @@ import { getPokemonTypeColor } from '@/lib/models/colors';
 import type { SortingColumns, SortingDirections } from '@/lib/models/common';
 import { POKEMON_TYPES, type PokemonType } from '@/lib/models/pokemon';
 import { usePokedexStore } from '@/stores/pokedex';
-import { defineProps, defineEmits, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { SlidersHorizontal } from 'lucide-vue-next';

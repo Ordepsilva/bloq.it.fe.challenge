@@ -16,8 +16,17 @@ import { useGetPokemonsCount } from '@/lib/queries/pokemons';
 import { downloadCsv } from '@/lib/csv';
 import { DownloadIcon } from 'lucide-vue-next';
 import { useFiltersQuery } from '@/composables/useFiltersQuery';
+import { toast } from 'vue-sonner';
 
 const store = usePokedexStore();
+const { currentPage } = usePaginationQuery(1);
+
+store.setPage(currentPage.value);
+
+watch(currentPage, (page) => {
+  store.setPage(page);
+});
+
 const isMobile = useIsMobile();
 const { searchName, selectedType, sortBy, sortDir } = useFiltersQuery({
   searchName: '',
@@ -25,13 +34,13 @@ const { searchName, selectedType, sortBy, sortDir } = useFiltersQuery({
   sortBy: 'id',
   sortDir: 'asc',
 });
-const { currentPage } = usePaginationQuery(1);
 const viewMode = ref<ViewModes>('table');
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
-const { data: count, isError } = useGetPokemonsCount();
+const { data: count, error, isError } = useGetPokemonsCount();
 const caughtCount = computed(() => Object.keys(store.caughtPokemons).length);
 const progressValue = computed(() => (count.value ? (caughtCount.value / count.value) * 100 : 0));
 const caughtPokemons = computed(() => Object.values(store.caughtPokemons));
+
 watch(
   [searchName, selectedType, sortBy, sortDir],
   ([name, type, by, dir]) => {
@@ -45,8 +54,8 @@ watch(
 
 watchEffect(() => {
   if (isError.value) {
-    //TODO:TOAST
-    console.error('Error fetching pokemons count');
+    toast.error('Error fetching pokémons count.');
+    console.error('Error fetching pokémons count', error.value);
   }
 });
 
