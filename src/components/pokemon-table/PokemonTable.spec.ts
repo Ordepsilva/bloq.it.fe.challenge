@@ -25,6 +25,7 @@ const samplePokemons: Pokemon[] = [
       specialDefense: 65,
       speed: 45,
     },
+    base_experience: 64,
   },
   {
     id: 4,
@@ -41,6 +42,7 @@ const samplePokemons: Pokemon[] = [
       specialDefense: 50,
       speed: 65,
     },
+    base_experience: 64,
   },
 ];
 

@@ -38,7 +38,7 @@ function handlePageUpdate(page: number) {
 </script>
 
 <template>
-  <div class="px-4 py-3 space-y-4">
+  <div class="px-4 space-y-4">
     <div class="flex justify-end items-center">
       <ViewModeToggle
         v-if="!isMobile"
