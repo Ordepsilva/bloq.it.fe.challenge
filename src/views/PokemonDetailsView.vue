@@ -25,7 +25,7 @@ const { isCaught, toggleCaught } = usePokemonCaught();
 const { data: pokemon, error, isLoading, isError } = useGetPokemon(id);
 const { data: evolutions } = useGetPokemonEvolutions(Number(id));
 
-const caughtPokemon = computed(() => store.caughtPokemons.get(Number(id)));
+const caughtPokemon = computed(() => store.caughtPokemons[Number(id)]);
 const typeColor = computed(() => getPokemonCardColor(pokemon.value?.types[0] ?? ''));
 watchEffect(() => {
   if (isError.value) {

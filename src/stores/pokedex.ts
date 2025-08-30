@@ -4,111 +4,119 @@ import type { Pokemon, PokemonCaughtEntry, PokemonType } from '@/lib/models/poke
 import type { SortingColumns, SortingDirections } from '@/lib/models/common';
 import { PER_PAGE } from '@/lib/constants';
 
-export const usePokedexStore = defineStore('pokedex', () => {
-  const caughtPokemons = ref<Map<number, PokemonCaughtEntry>>(new Map());
+export const usePokedexStore = defineStore(
+  'pokedex',
+  () => {
+    const caughtPokemons = ref<Record<number, PokemonCaughtEntry>>({});
 
-  const currentPage = ref(1);
-  const itemsPerPage = ref(PER_PAGE);
+    const currentPage = ref(1);
+    const itemsPerPage = ref(PER_PAGE);
 
-  const searchName = ref<string>('');
-  const selectedType = ref<PokemonType | null>(null);
-  const sortBy = ref<SortingColumns>('id');
-  const sortDir = ref<SortingDirections>('asc');
+    const searchName = ref<string>('');
+    const selectedType = ref<PokemonType | null>(null);
+    const sortBy = ref<SortingColumns>('id');
+    const sortDir = ref<SortingDirections>('asc');
 
-  watch([searchName, selectedType], () => {
-    currentPage.value = 1;
-  });
-
-  const activeFilterCount = computed(() => {
-    let count = 0;
-    if (searchName.value !== '') count++;
-    if (selectedType.value !== null) count++;
-    if (sortBy.value !== 'id') count++;
-    if (sortDir.value !== 'asc') count++;
-    return count;
-  });
-
-  function toggleCaught(pokemon: Pokemon) {
-    if (caughtPokemons.value.has(pokemon.id)) {
-      caughtPokemons.value.delete(pokemon.id);
-      return;
-    }
-    caughtPokemons.value.set(pokemon.id, {
-      ...pokemon,
-      notes: [],
-      timestamp: Date.now(),
-    });
-  }
-
-  function addNote(id: number, note: string) {
-    const entry = caughtPokemons.value.get(id);
-    if (entry) entry.notes.push(note);
-  }
-
-  function removeNote(id: number, index: number) {
-    const entry = caughtPokemons.value.get(id);
-    if (entry) {
-      entry.notes.splice(index, 1);
-      caughtPokemons.value.set(id, { ...entry });
-    }
-  }
-
-  function setPage(page: number) {
-    currentPage.value = page;
-  }
-
-  function setItemsPerPage(count: number) {
-    itemsPerPage.value = count;
-    currentPage.value = 1;
-  }
-
-  const filteredPokemons = computed(() => {
-    let result = Array.from(caughtPokemons.value.values());
-
-    if (searchName.value) {
-      result = result.filter((e) => e.name.toLowerCase().includes(searchName.value.toLowerCase()));
-    }
-
-    if (selectedType.value) {
-      result = result.filter((e) => e.types.includes(selectedType.value as PokemonType));
-    }
-
-    result.sort((a, b) => {
-      const dir = sortDir.value === 'asc' ? 1 : -1;
-      if (a[sortBy.value] < b[sortBy.value]) return -1 * dir;
-      if (a[sortBy.value] > b[sortBy.value]) return 1 * dir;
-      return 0;
+    watch([searchName, selectedType], () => {
+      currentPage.value = 1;
     });
 
-    return result;
-  });
+    const activeFilterCount = computed(() => {
+      let count = 0;
+      if (searchName.value !== '') count++;
+      if (selectedType.value !== null) count++;
+      if (sortBy.value !== 'id') count++;
+      if (sortDir.value !== 'asc') count++;
+      return count;
+    });
 
-  const paginatedPokemons = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage.value;
-    const endIndex = startIndex + itemsPerPage.value;
-    return filteredPokemons.value.slice(startIndex, endIndex);
-  });
+    function toggleCaught(pokemon: Pokemon) {
+      if (caughtPokemons.value[pokemon.id]) {
+        delete caughtPokemons.value[pokemon.id];
+        return;
+      }
+      caughtPokemons.value[pokemon.id] = {
+        ...pokemon,
+        notes: [],
+        timestamp: Date.now(),
+      };
+    }
 
-  const totalPages = computed(() => {
-    return Math.ceil(filteredPokemons.value.length / itemsPerPage.value);
-  });
+    function addNote(id: number, note: string) {
+      const entry = caughtPokemons.value[id];
+      if (entry) entry.notes.push(note);
+    }
 
-  return {
-    caughtPokemons,
-    searchName,
-    selectedType,
-    sortBy,
-    sortDir,
-    toggleCaught,
-    addNote,
-    removeNote,
-    filteredPokemons,
-    paginatedPokemons,
-    activeFilterCount,
-    currentPage,
-    itemsPerPage,
-    totalPages,
-    setPage,
-    setItemsPerPage,
-  };
-});
+    function removeNote(id: number, index: number) {
+      const entry = caughtPokemons.value[id];
+      if (entry) {
+        entry.notes.splice(index, 1);
+        caughtPokemons.value[id] = { ...entry };
+      }
+    }
+
+    function setPage(page: number) {
+      currentPage.value = page;
+    }
+
+    function setItemsPerPage(count: number) {
+      itemsPerPage.value = count;
+      currentPage.value = 1;
+    }
+
+    const filteredPokemons = computed(() => {
+      let result = Object.values(caughtPokemons.value);
+
+      if (searchName.value) {
+        result = result.filter((e) =>
+          e.name.toLowerCase().includes(searchName.value.toLowerCase()),
+        );
+      }
+
+      if (selectedType.value) {
+        result = result.filter((e) => e.types.includes(selectedType.value as PokemonType));
+      }
+
+      result.sort((a, b) => {
+        const dir = sortDir.value === 'asc' ? 1 : -1;
+        if (a[sortBy.value] < b[sortBy.value]) return -1 * dir;
+        if (a[sortBy.value] > b[sortBy.value]) return 1 * dir;
+        return 0;
+      });
+
+      return result;
+    });
+
+    const paginatedPokemons = computed(() => {
+      const startIndex = (currentPage.value - 1) * itemsPerPage.value;
+      const endIndex = startIndex + itemsPerPage.value;
+      return filteredPokemons.value.slice(startIndex, endIndex);
+    });
+
+    const totalPages = computed(() => {
+      return Math.ceil(filteredPokemons.value.length / itemsPerPage.value);
+    });
+
+    return {
+      caughtPokemons,
+      searchName,
+      selectedType,
+      sortBy,
+      sortDir,
+      toggleCaught,
+      addNote,
+      removeNote,
+      filteredPokemons,
+      paginatedPokemons,
+      activeFilterCount,
+      currentPage,
+      itemsPerPage,
+      totalPages,
+      setPage,
+      setItemsPerPage,
+    };
+  },
+  {
+    persist: true,
+  },
+);

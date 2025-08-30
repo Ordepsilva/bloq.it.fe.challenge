@@ -45,8 +45,6 @@ export async function getPokemonEvolutions(pokemonId: number): Promise<PokemonEv
 
   const { chain } = await p.getEvolutionChainById(Number(evolutionId));
 
-  console.log(chain);
-
   const evolutionNames = extractEvolutionNames(chain);
 
   const evolutions: PokemonEvolution[] = await Promise.all(

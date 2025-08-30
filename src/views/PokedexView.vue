@@ -25,9 +25,9 @@ const currentPage = ref(1);
 const viewMode = ref<ViewModes>('table');
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 const { data: count, isError } = useGetPokemonsCount();
-const progressValue = computed(() =>
-  count.value ? (store.caughtPokemons.size / count.value) * 100 : 0,
-);
+const caughtCount = computed(() => Object.keys(store.caughtPokemons).length);
+const progressValue = computed(() => (count.value ? (caughtCount.value / count.value) * 100 : 0));
+const caughtPokemons = computed(() => Object.values(store.caughtPokemons));
 watch(
   () => route.query,
   (query) => {
@@ -61,6 +61,7 @@ watch(
   },
   { deep: true },
 );
+//TODO pagination and sorting in url
 
 watchEffect(() => {
   if (isError.value) {
@@ -74,7 +75,7 @@ function handlePageUpdate(page: number) {
 }
 
 function downloadPokedexCsv() {
-  const csv = exportPokemonsToCsv(Array.from(store.caughtPokemons.values()));
+  const csv = exportPokemonsToCsv(caughtPokemons.value);
   downloadCsv(csv, 'my_pokedex.csv');
 }
 </script>
@@ -90,7 +91,7 @@ function downloadPokedexCsv() {
 
         <div class="flex w-full items-center gap-2">
           <span class="px-3 py-1 rounded-full bg-green-200 text-green-800 font-semibold">
-            {{ store.caughtPokemons.size }} / {{ count }} caught
+            {{ caughtCount }} / {{ count }} caught
           </span>
           <Progress class="w-8/12 h-3 bg-gray-200" :model-value="progressValue" />
         </div>

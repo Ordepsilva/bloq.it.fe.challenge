@@ -5,7 +5,7 @@ export function usePokemonCaught() {
   const pokedexStore = usePokedexStore();
 
   function isCaught(pokemon: Pokemon) {
-    return pokedexStore.caughtPokemons.has(pokemon.id);
+    return pokedexStore.caughtPokemons[Number(pokemon.id)] !== undefined;
   }
 
   function toggleCaught(pokemon: Pokemon) {

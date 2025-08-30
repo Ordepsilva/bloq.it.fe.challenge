@@ -31,6 +31,7 @@
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.541.0",
     "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
     "pokeapi-js-wrapper": "^1.2.8",
     "reka-ui": "^2.5.0",
     "tailwind-merge": "^3.3.1",

@@ -30,13 +30,11 @@ export function useGetPokemon(idOrName: number | string) {
 
   return useQuery<Pokemon | PokemonCaughtEntry>({
     queryKey: [QUERY_KEYS.pokemon, idOrName],
-    queryFn: async () => {
+    queryFn: () => getPokemonByNameOrId(idOrName),
+    initialData: () => {
       const numericId = Number(idOrName);
-      if (!isNaN(numericId) && store.caughtPokemons.has(numericId)) {
-        return store.caughtPokemons.get(numericId)!;
-      }
-
-      return await getPokemonByNameOrId(idOrName);
+      const entry = store.caughtPokemons[numericId];
+      return entry ? { ...entry } : undefined;
     },
   });
 }

@@ -44,7 +44,7 @@ const router = useRouter();
 
       <TableBody>
         <TableRow v-if="props.pokemons.length === 0">
-          <TableCell colspan="12" class="text-center p-4"> No Pokemons Found. </TableCell>
+          <TableCell colspan="14" class="text-center p-4"> No Pokemons Found. </TableCell>
         </TableRow>
         <TableRow
           v-else

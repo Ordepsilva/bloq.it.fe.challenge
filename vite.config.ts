@@ -12,6 +12,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['normal_pokeball.svg', 'ultra_ball.svg'],
       manifest: {
         name: 'Bloq-it Pokédex',
         short_name: 'Pokédex',
@@ -21,14 +22,29 @@ export default defineConfig({
         theme_color: '#1976d2',
         icons: [
           {
-            src: 'favicon.ico',
-            sizes: '64x64 32x32 24x24 16x16',
-            type: 'image/x-icon',
+            src: '72.png',
+            sizes: '72x72',
+            type: 'image/png',
           },
           {
-            src: 'normal_pokeball.svg',
+            src: '128.png',
+            sizes: '128x128',
+            type: 'image/png',
+          },
+          {
+            src: '144.png',
+            sizes: '144x144',
+            type: 'image/png',
+          },
+          {
+            src: '192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
+          },
+          {
+            src: '512.png',
+            sizes: '512x512',
+            type: 'image/png',
           },
         ],
       },
