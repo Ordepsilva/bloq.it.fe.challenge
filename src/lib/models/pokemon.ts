@@ -1,4 +1,5 @@
 import { type Pokemon as APIPokemon, type PokemonType as APIPokemonType } from 'pokeapi-js-wrapper';
+import { formatDate } from '../utils';
 
 export type Pokemon = {
   id: number;
@@ -100,4 +101,20 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),
     stats: mappedStats,
   };
+}
+
+export function exportPokemonsToCsv(data: PokemonCaughtEntry[]): string {
+  const headers = ['ID', 'Name', 'Types', 'Height', 'Weight', 'Date caught', 'Notes'];
+
+  const rows = data.map((p) => [
+    p.id,
+    p.name,
+    p.types.join(', '),
+    p.height,
+    p.weight,
+    formatDate(p.timestamp),
+    p.notes.join(' | '),
+  ]);
+
+  return [headers, ...rows].map((row) => row.join(',')).join('\n');
 }

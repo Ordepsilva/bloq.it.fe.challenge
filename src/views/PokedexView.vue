@@ -10,9 +10,11 @@ import { useIsMobile } from '@/composables/useIsMobile';
 import { usePokedexStore } from '@/stores/pokedex';
 import { PER_PAGE } from '@/lib/constants';
 import type { SortingColumns, SortingDirections, ViewModes } from '@/lib/models/common';
-import type { PokemonType } from '@/lib/models/pokemon';
+import { exportPokemonsToCsv, type PokemonType } from '@/lib/models/pokemon';
 import { Progress } from '@/components/ui/progress';
 import { useGetPokemonsCount } from '@/lib/queries/pokemons';
+import { downloadCsv } from '@/lib/csv';
+import { DownloadIcon } from 'lucide-vue-next';
 
 const store = usePokedexStore();
 const route = useRoute();
@@ -70,6 +72,11 @@ watchEffect(() => {
 function handlePageUpdate(page: number) {
   store.setPage(page);
 }
+
+function downloadPokedexCsv() {
+  const csv = exportPokemonsToCsv(Array.from(store.caughtPokemons.values()));
+  downloadCsv(csv, 'my_pokedex.csv');
+}
 </script>
 
 <template>
@@ -89,6 +96,12 @@ function handlePageUpdate(page: number) {
         </div>
       </div>
       <div class="flex md:items-center gap-2 items-end">
+        <div role="button" class="flex items-center gap-1 p-2" title="Download Pokédex CSV">
+          <DownloadIcon
+            class="w-5 h-5 text-gray-500 cursor-pointer hover:scale-110"
+            @click="downloadPokedexCsv"
+          />
+        </div>
         <ViewModeToggle v-if="!isMobile" v-model="viewMode" />
         <PokemonTableFilters
           v-if="store.filteredPokemons.length > 0 || store.activeFilterCount > 0"
