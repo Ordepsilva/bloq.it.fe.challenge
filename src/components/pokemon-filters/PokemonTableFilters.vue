@@ -70,14 +70,15 @@ function selectType(type: PokemonType) {
 <template>
   <Popover v-model:open="showFilters" tooltip="Filters & Sorting">
     <PopoverTrigger asChild>
-      <Button variant="outline" size="icon" class="hover:bg-gray-200 relative">
+      <Button
+        variant="ghost"
+        size="icon"
+        class="hover:bg-gray-200 relative"
+        :class="store.activeFilterCount > 0 ? 'bg-blue-500' : ''"
+        title="Filters & Sorting"
+        tooltip="Filters & Sorting"
+      >
         <SlidersHorizontal class="w-5 h-5" />
-        <span
-          v-if="store.activeFilterCount > 0"
-          class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"
-        >
-          {{ store.activeFilterCount }}
-        </span>
       </Button>
     </PopoverTrigger>
 
