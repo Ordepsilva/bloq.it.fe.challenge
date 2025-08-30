@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Pokemon } from '@/lib/models/pokemon';
 import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
+import { createPinia, setActivePinia } from 'pinia';
 
 const mockPush = vi.fn();
 vi.mock('vue-router', () => ({
@@ -48,6 +49,8 @@ const samplePokemons: Pokemon[] = [
 
 describe('PokemonTable', () => {
   beforeEach(() => {
+    setActivePinia(createPinia());
+
     mockPush.mockClear();
   });
   it('renders "No Pokemons Found" if list is empty', () => {
@@ -80,7 +83,7 @@ describe('PokemonTable', () => {
     const firstRow = wrapper.find('tbody tr');
     await firstRow.trigger('click');
 
-    expect(mockPush).toHaveBeenCalledWith('/pokemon/bulbasaur');
+    expect(mockPush).toHaveBeenCalledWith('/pokemon/1');
   });
 
   it('renders type badges', () => {

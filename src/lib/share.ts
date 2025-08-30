@@ -1,3 +1,5 @@
+import { toast } from 'vue-sonner';
+
 interface ShareOptions {
   title: string;
   text: string;
@@ -17,6 +19,6 @@ export async function share({ title, text, url }: ShareOptions) {
     }
   } catch (err) {
     console.error('Failed to copy: ', err);
-    // TODO: Toast error
+    toast.error('Failed to share');
   }
 }

@@ -59,11 +59,6 @@ export const usePokedexStore = defineStore(
       currentPage.value = page;
     }
 
-    function setItemsPerPage(count: number) {
-      itemsPerPage.value = count;
-      currentPage.value = 1;
-    }
-
     const filteredPokemons = computed(() => {
       let result = Object.values(caughtPokemons.value);
 
@@ -113,7 +108,6 @@ export const usePokedexStore = defineStore(
       itemsPerPage,
       totalPages,
       setPage,
-      setItemsPerPage,
     };
   },
   {
