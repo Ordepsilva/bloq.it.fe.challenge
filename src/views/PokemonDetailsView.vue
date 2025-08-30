@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue';
+import PokemonLoading from '@/components/pokemon-loading/PokemonLoading.vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePokedexStore } from '@/stores/pokedex';
 import { getPokemonCardColor } from '@/lib/models/colors';
@@ -15,6 +16,7 @@ import PokemonStatsRadar from '@/components/pokemon-stats-radar/PokemonStatsRada
 import PokemonEvolutions from '@/components/pokemon-evolutions/PokemonEvolutions.vue';
 import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/share';
+import { toast } from 'vue-sonner';
 
 const route = useRoute();
 
@@ -23,20 +25,29 @@ const store = usePokedexStore();
 const { isCaught, toggleCaught } = usePokemonCaught();
 
 const { data: pokemon, error, isLoading, isError } = useGetPokemon(id);
-const { data: evolutions } = useGetPokemonEvolutions(Number(id));
+const {
+  data: evolutions,
+  error: evolutionsError,
+  isError: isEvolutionsError,
+} = useGetPokemonEvolutions(Number(id));
 
 const caughtPokemon = computed(() => store.caughtPokemons[Number(id)]);
 const typeColor = computed(() => getPokemonCardColor(pokemon.value?.types[0] ?? ''));
 watchEffect(() => {
   if (isError.value) {
-    //TODO:throw toast error
-    //return in every if
+    toast.error('Error fetching pokemons');
     console.error('Error fetching pokemons:', error.value);
+    return;
+  }
+  if (isEvolutionsError.value) {
+    toast.error('Error fetching pokemon evolutions');
+    console.error('Error fetching pokemon evolutions:', evolutionsError.value);
   }
 });
 
 function addNote(note: string) {
   store.addNote(Number(id), note);
+  toast.success('Note added!');
 }
 
 function removeNote(index: number) {
@@ -55,8 +66,8 @@ function sharePokemon() {
 
 <template>
   <div class="max-w-4xl mx-auto p-6">
-    <div v-if="isLoading">Loading…</div>
-    <div v-else-if="isError">Error loading Pokémon.</div>
+    <PokemonLoading v-if="isLoading" />
+    <div v-else-if="isError">No Pokemon Found.</div>
     <div v-else-if="pokemon">
       <Card
         class="mb-6 relative overflow-hidden rounded-2xl p-4 shadow-lg border-none"

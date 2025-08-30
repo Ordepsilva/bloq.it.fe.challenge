@@ -9,6 +9,8 @@ import { PER_PAGE } from '@/lib/constants';
 import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
 import type { ViewModes } from '@/lib/models/common';
 import { usePaginationQuery } from '@/composables/usePaginationQuery';
+import { toast } from 'vue-sonner';
+import PokemonLoading from '@/components/pokemon-loading/PokemonLoading.vue';
 
 const { currentPage } = usePaginationQuery(1);
 const viewMode = ref<ViewModes>('table');
@@ -17,16 +19,18 @@ const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value)
 const isMobile = useIsMobile();
 
 const { data: pokemons, error, isLoading, isError: isErrorPokemons } = useGetPokemons(currentPage);
-const { data: count, isError: isErrorCount } = useGetPokemonsCount();
+const { data: count, error: countError, isError: isErrorCount } = useGetPokemonsCount();
 
 watchEffect(() => {
   if (isErrorPokemons.value) {
-    //throw toast error
-    //return in every if
+    toast.error('Error fetching pokemons');
     console.error('Error fetching pokemons:', error.value);
+    return;
   }
   if (isErrorCount.value) {
-    console.error('Error fetching pokemons count');
+    toast.error('Error fetching pokemons count');
+    console.error('Error fetching pokemons count:', countError.value);
+    return;
   }
 });
 
@@ -46,7 +50,7 @@ function handlePageUpdate(page: number) {
     </div>
     <div>
       <!-- Replace with Loading Component -->
-      <div v-if="isLoading">Loading....</div>
+      <PokemonLoading v-if="isLoading" />
       <div v-else-if="isErrorPokemons">Error:{{ 'Failed to get Pokemons' }}</div>
       <div v-else>
         <PokemonTable v-if="effectiveView === 'table'" :pokemons="pokemons ?? []" />

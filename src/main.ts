@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import './style.css';
+
 import router from './router';
 import AppLayout from './layouts/AppLayout.vue';
 import { VueQueryPlugin, type VueQueryPluginOptions } from '@tanstack/vue-query';
