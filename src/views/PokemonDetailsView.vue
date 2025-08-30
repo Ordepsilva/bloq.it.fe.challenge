@@ -10,13 +10,13 @@ import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.v
 import { usePokemonCaught } from '@/composables/usePokemonCaught';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { formatDate } from '@/lib/utils';
-
 import { Share2 } from 'lucide-vue-next';
 import PokemonStatsRadar from '@/components/pokemon-stats-radar/PokemonStatsRadar.vue';
 import PokemonEvolutions from '@/components/pokemon-evolutions/PokemonEvolutions.vue';
 import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/share';
 import { toast } from 'vue-sonner';
+import { ArrowLeftIcon } from 'lucide-vue-next';
 
 const route = useRoute();
 
@@ -65,7 +65,15 @@ function sharePokemon() {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto p-6">
+  <div class="max-w-4xl mx-auto">
+    <div
+      role="button"
+      class="mb-4 cursor-pointer flex text-gray-500 hover:text-red-500"
+      @click="$router.back()"
+    >
+      <ArrowLeftIcon />
+      <span>Go Back</span>
+    </div>
     <PokemonLoading v-if="isLoading" />
     <div v-else-if="isError">No Pokemon Found.</div>
     <div v-else-if="pokemon">

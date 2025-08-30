@@ -49,9 +49,7 @@ function handlePageUpdate(page: number) {
       />
     </div>
     <div>
-      <!-- Replace with Loading Component -->
       <PokemonLoading v-if="isLoading" />
-      <div v-else-if="isErrorPokemons">Error:{{ 'Failed to get Pokemons' }}</div>
       <div v-else>
         <PokemonTable v-if="effectiveView === 'table'" :pokemons="pokemons ?? []" />
         <PokemonCardGrid v-else :pokemons="pokemons ?? []" />
