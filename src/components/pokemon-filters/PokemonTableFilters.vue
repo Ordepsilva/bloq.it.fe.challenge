@@ -1,23 +1,35 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Input } from '@/components/ui/input';
+import { getPokemonTypeColor } from '@/lib/models/colors';
+import type { SortingColumns, SortingDirections } from '@/lib/models/common';
 import { POKEMON_TYPES, type PokemonType } from '@/lib/models/pokemon';
 import { usePokedexStore } from '@/stores/pokedex';
-import { getPokemonTypeColor } from '@/lib/models/colors';
+import { defineProps, defineEmits, ref, computed } from 'vue';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
 import { SlidersHorizontal } from 'lucide-vue-next';
-import type { SortingColumns, SortingDirections } from '@/lib/models/common';
+import { Input } from '@/components/ui/input';
 
-const store = usePokedexStore();
+const props = defineProps<{
+  searchName: string;
+  selectedType: PokemonType | null;
+  sortBy: SortingColumns;
+  sortDir: SortingDirections;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:searchName', value: string): void;
+  (e: 'update:selectedType', value: PokemonType | null): void;
+  (e: 'update:sortBy', value: SortingColumns): void;
+  (e: 'update:sortDir', value: SortingDirections): void;
+}>();
 
 const showFilters = ref(false);
-
-const sortKey = ref<SortingColumns>('id');
-const sortDir = ref<SortingDirections>('asc');
+const sortKey = ref<SortingColumns>(props.sortBy);
+const sortDir = ref<SortingDirections>(props.sortDir);
 const filterKey = ref<'name' | 'type'>('name');
-const filterValue = ref('');
+const filterValue = ref(props.searchName);
 
+const store = usePokedexStore();
 const capitalizedTypes = computed(() =>
   POKEMON_TYPES.map((type) => ({
     value: type,
@@ -49,12 +61,14 @@ const filterColumns: { key: 'name' | 'type'; label: string }[] = [
 ];
 
 function applyFilters() {
-  store.sortBy = sortKey.value;
-  store.sortDir = sortDir.value;
+  emit('update:sortBy', sortKey.value);
+  emit('update:sortDir', sortDir.value);
   if (filterKey.value === 'name') {
-    store.searchName = filterValue.value;
+    emit('update:searchName', filterValue.value);
+    emit('update:selectedType', null);
   } else {
-    store.selectedType = filterValue.value as PokemonType;
+    emit('update:selectedType', filterValue.value as PokemonType);
+    emit('update:searchName', '');
   }
 }
 

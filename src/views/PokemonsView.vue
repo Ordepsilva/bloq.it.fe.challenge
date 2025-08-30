@@ -5,18 +5,17 @@ import PokemonCardGrid from '@/components/pokemon-card-grid/PokemonCardGrid.vue'
 import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination.vue';
 import { useIsMobile } from '@/composables/useIsMobile';
 import { useGetPokemons, useGetPokemonsCount } from '@/lib/queries/pokemons';
-import { useInvalidateQuery } from '@/lib/queries/useInvalidateQuery';
 import { PER_PAGE } from '@/lib/constants';
 import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
 import type { ViewModes } from '@/lib/models/common';
+import { usePaginationQuery } from '@/composables/usePaginationQuery';
 
-const currentPage = ref(1);
+const { currentPage } = usePaginationQuery(1);
 const viewMode = ref<ViewModes>('table');
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 
 const isMobile = useIsMobile();
 
-const { invalidate: invalidatePokemons } = useInvalidateQuery('pokemons');
 const { data: pokemons, error, isLoading, isError: isErrorPokemons } = useGetPokemons(currentPage);
 const { data: count, isError: isErrorCount } = useGetPokemonsCount();
 
@@ -33,7 +32,6 @@ watchEffect(() => {
 
 function handlePageUpdate(page: number) {
   currentPage.value = page;
-  invalidatePokemons();
 }
 </script>
 

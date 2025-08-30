@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch, watchEffect } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { usePaginationQuery } from '@/composables/usePaginationQuery';
 import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
 import PokemonCardGrid from '@/components/pokemon-card-grid/PokemonCardGrid.vue';
 import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination.vue';
@@ -9,19 +9,23 @@ import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
 import { useIsMobile } from '@/composables/useIsMobile';
 import { usePokedexStore } from '@/stores/pokedex';
 import { PER_PAGE } from '@/lib/constants';
-import type { SortingColumns, SortingDirections, ViewModes } from '@/lib/models/common';
-import { exportPokemonsToCsv, type PokemonType } from '@/lib/models/pokemon';
+import type { ViewModes } from '@/lib/models/common';
+import { exportPokemonsToCsv } from '@/lib/models/pokemon';
 import { Progress } from '@/components/ui/progress';
 import { useGetPokemonsCount } from '@/lib/queries/pokemons';
 import { downloadCsv } from '@/lib/csv';
 import { DownloadIcon } from 'lucide-vue-next';
+import { useFiltersQuery } from '@/composables/useFiltersQuery';
 
 const store = usePokedexStore();
-const route = useRoute();
-const router = useRouter();
 const isMobile = useIsMobile();
-
-const currentPage = ref(1);
+const { searchName, selectedType, sortBy, sortDir } = useFiltersQuery({
+  searchName: '',
+  selectedType: undefined,
+  sortBy: 'id',
+  sortDir: 'asc',
+});
+const { currentPage } = usePaginationQuery(1);
 const viewMode = ref<ViewModes>('table');
 const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 const { data: count, isError } = useGetPokemonsCount();
@@ -29,39 +33,15 @@ const caughtCount = computed(() => Object.keys(store.caughtPokemons).length);
 const progressValue = computed(() => (count.value ? (caughtCount.value / count.value) * 100 : 0));
 const caughtPokemons = computed(() => Object.values(store.caughtPokemons));
 watch(
-  () => route.query,
-  (query) => {
-    store.searchName = (query.name as string) ?? '';
-    store.selectedType = (query.type as PokemonType) ?? null;
-    store.sortBy = (query.sortBy as SortingColumns) ?? 'id';
-    store.sortDir = (query.sortDir as SortingDirections) ?? 'asc';
-    currentPage.value = parseInt(query.page as string) || 1;
+  [searchName, selectedType, sortBy, sortDir],
+  ([name, type, by, dir]) => {
+    store.searchName = name;
+    store.selectedType = type;
+    store.sortBy = by;
+    store.sortDir = dir;
   },
   { immediate: true },
 );
-
-watch(
-  [
-    () => store.searchName,
-    () => store.selectedType,
-    () => store.sortBy,
-    () => store.sortDir,
-    currentPage,
-  ],
-  () => {
-    router.replace({
-      query: {
-        name: store.searchName || undefined,
-        type: store.selectedType || undefined,
-        sortBy: store.sortBy,
-        sortDir: store.sortDir,
-        page: currentPage.value,
-      },
-    });
-  },
-  { deep: true },
-);
-//TODO pagination and sorting in url
 
 watchEffect(() => {
   if (isError.value) {
@@ -71,6 +51,7 @@ watchEffect(() => {
 });
 
 function handlePageUpdate(page: number) {
+  currentPage.value = page;
   store.setPage(page);
 }
 
@@ -106,10 +87,10 @@ function downloadPokedexCsv() {
         <ViewModeToggle v-if="!isMobile" v-model="viewMode" />
         <PokemonTableFilters
           v-if="store.filteredPokemons.length > 0 || store.activeFilterCount > 0"
-          v-model:search-name="store.searchName"
-          v-model:type="store.selectedType"
-          v-model:sort-by="store.sortBy"
-          v-model:sort-dir="store.sortDir"
+          v-model:searchName="searchName"
+          v-model:selectedType="selectedType"
+          v-model:sortBy="sortBy"
+          v-model:sortDir="sortDir"
         />
       </div>
     </div>
