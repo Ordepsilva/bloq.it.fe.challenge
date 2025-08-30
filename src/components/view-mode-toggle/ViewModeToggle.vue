@@ -21,10 +21,16 @@ const localValue = computed({
 
 <template>
   <ToggleGroup v-model="localValue" type="single" class="flex" :disabled="props.disabled">
-    <ToggleGroupItem value="table" class="p-2 rounded-md cursor-pointer hover:bg-gray-200">
+    <ToggleGroupItem
+      value="table"
+      class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
+    >
       <Table class="h-5 w-5" />
     </ToggleGroupItem>
-    <ToggleGroupItem value="cards" class="p-2 rounded-md cursor-pointer hover:bg-gray-200">
+    <ToggleGroupItem
+      value="cards"
+      class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
+    >
       <LayoutGrid class="h-5 w-5" />
     </ToggleGroupItem>
   </ToggleGroup>

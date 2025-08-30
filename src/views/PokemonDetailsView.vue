@@ -9,9 +9,12 @@ import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.v
 import { usePokemonCaught } from '@/composables/usePokemonCaught';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { formatDate } from '@/lib/utils';
+
+import { Share2 } from 'lucide-vue-next';
 import PokemonStatsRadar from '@/components/pokemon-stats-radar/PokemonStatsRadar.vue';
 import PokemonEvolutions from '@/components/pokemon-evolutions/PokemonEvolutions.vue';
 import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
+import { share } from '@/lib/share';
 
 const route = useRoute();
 
@@ -24,7 +27,6 @@ const { data: evolutions } = useGetPokemonEvolutions(Number(id));
 
 const caughtPokemon = computed(() => store.caughtPokemons.get(Number(id)));
 const typeColor = computed(() => getPokemonCardColor(pokemon.value?.types[0] ?? ''));
-
 watchEffect(() => {
   if (isError.value) {
     //TODO:throw toast error
@@ -40,6 +42,15 @@ function addNote(note: string) {
 function removeNote(index: number) {
   store.removeNote(Number(id), index);
 }
+
+function sharePokemon() {
+  if (!pokemon.value) return;
+  share({
+    title: `Check out ${pokemon.value.name} on Pokédex!`,
+    text: `#${pokemon.value.id} ${pokemon.value.name}`,
+    url: window.location.href,
+  });
+}
 </script>
 
 <template>
@@ -48,15 +59,23 @@ function removeNote(index: number) {
     <div v-else-if="isError">Error loading Pokémon.</div>
     <div v-else-if="pokemon">
       <Card
-        class="mb-6 relative overflow-hidden rounded-2xl shadow-lg border-none"
+        class="mb-6 relative overflow-hidden rounded-2xl p-4 shadow-lg border-none"
         :class="typeColor"
       >
-        <PokeballButton
-          :caught="isCaught(pokemon)"
-          size="w-16 h-16"
-          class="absolute right-4 top-4"
-          @click="toggleCaught(pokemon)"
-        />
+        <div class="absolute right-4 top-4 flex gap-6">
+          <div
+            role="button"
+            class="flex items-center p-4 hover:scale-110 transition-transform duration-300"
+            title="Share Pokémon"
+          >
+            <Share2 class="w-6 h-6 cursor-pointer text-white" @click="sharePokemon" />
+          </div>
+          <PokeballButton
+            :caught="isCaught(pokemon)"
+            size="w-16 h-16"
+            @click="toggleCaught(pokemon)"
+          />
+        </div>
 
         <CardHeader class="flex flex-col md:flex-row items-center gap-6 py-6">
           <img

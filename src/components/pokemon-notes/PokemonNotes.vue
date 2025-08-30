@@ -35,7 +35,7 @@ const newNote = ref<string>('');
         <li
           v-for="(note, i) in props.notes"
           :key="i"
-          class="flex justify-between items-center bg-white/80 border-2 border-yellow-200 p-2 rounded-xl shadow"
+          class="flex justify-between items-center bg-white/80 p-2 rounded-xl shadow"
         >
           <span class="font-semibold text-gray-700">{{ note }}</span>
           <Button
