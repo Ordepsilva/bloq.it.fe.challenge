@@ -73,10 +73,11 @@ function sharePokemon() {
         class="mb-6 relative overflow-hidden rounded-2xl p-4 shadow-lg border-none"
         :class="typeColor"
       >
-        <div class="absolute right-4 top-4 flex gap-6">
+        <div class="absolute right-4 top-4 flex md:gap-6 flex-col md:flex-row">
           <div
+            v-if="isCaught(pokemon)"
             role="button"
-            class="flex items-center p-4 hover:scale-110 transition-transform duration-300"
+            class="flex items-center p-4 hover:scale-110 transition-transform duration-300 order-2 md:order-1"
             title="Share Pokémon"
           >
             <Share2 class="w-6 h-6 cursor-pointer text-white" @click="sharePokemon" />
@@ -84,6 +85,7 @@ function sharePokemon() {
           <PokeballButton
             :caught="isCaught(pokemon)"
             size="w-16 h-16"
+            class="order-1 md:order-2"
             @click="toggleCaught(pokemon)"
           />
         </div>

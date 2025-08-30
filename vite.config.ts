@@ -11,7 +11,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['normal_pokeball.svg', 'ultra_ball.svg'],
+      includeAssets: ['normal_pokeball.png', 'ultra_ball.svg'],
       manifest: {
         name: 'Bloq-it Pokédex',
         short_name: 'Pokédex',

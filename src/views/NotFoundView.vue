@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArrowLeft } from 'lucide-vue-next';
-const pokeballImg = '/normal_pokeball.svg';
+const pokeballImg = '/normal_pokeball.png';
 const funnyText = [
   "Looks like you've used Splash!",
   'This page is as lost as a Magikarp in a sandstorm.',

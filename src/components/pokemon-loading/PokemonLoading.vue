@@ -26,7 +26,7 @@ onUnmounted(() => {
 
 <template>
   <div class="flex flex-col items-center justify-center py-16 gap-4">
-    <img src="/normal_pokeball.svg" alt="Loading Pokéball" class="w-16 h-16 pokeball-bounce" />
+    <img src="/normal_pokeball.png" alt="Loading Pokéball" class="w-16 h-16 pokeball-bounce" />
     <div class="text-2xl font-pokemon font-bold text-primary drop-shadow">
       {{ currentMessage }}
     </div>

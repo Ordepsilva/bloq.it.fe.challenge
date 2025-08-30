@@ -18,7 +18,7 @@ const emit = defineEmits<{ (e: 'click'): void }>();
     @click.stop="emit('click')"
   >
     <img
-      src="/normal_pokeball.svg"
+      src="/normal_pokeball.png"
       :alt="props.caught ? 'Pokémon caught' : 'Pokémon not caught'"
       :class="[
         props.size || 'w-12 h-12',
