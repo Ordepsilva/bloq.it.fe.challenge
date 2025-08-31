@@ -1,61 +1,88 @@
-# bloq-it-fe-challenge
+# Pokédex App – bloq-it-fe-challenge
 
-This template should help get you started developing with Vue 3 in Vite.
+An advanced Pokédex web app built with Vue 3, Vite, Pinia, TanStack Query, Tailwind CSS, and ChadCN UI components. Features offline support, persistent state, filtering, sorting, pagination, CSV export, and a fun Pokémon-themed UI. Includes native share API integration and a modular API layer.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Browse, search, and filter Pokémon
+- Catch and release Pokémon (persistent across reloads)
+- Add notes to caught Pokémon
+- View Pokémon details, stats, and evolutions
+- Switch between table and card/grid view modes
+- Pagination and filter state synced with URL
+- Export caught Pokémon to CSV
+- Offline support (PWA)
+- Toast notifications for actions and errors
+- Responsive, mobile-friendly design
+- Native share API for sharing Pokémon details
 
-## Type Support for `.vue` Imports in TS
+## Tech Stack
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- [Vue 3](https://vuejs.org/) + [Vite](https://vitejs.dev/)
+- [Pinia](https://pinia.vuejs.org/) for state management
+- [TanStack Query](https://tanstack.com/query/latest) for data fetching/caching
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [ChadCN UI](https://ui.shadcn.com/) for reusable UI primitives
+- [Vitest](https://vitest.dev/) for unit tests
+- [pokeapi-js-wrapper](https://github.com/PokeAPI/pokeapi-js-wrapper) for Pokémon data
+- [vue-sonner](https://github.com/emilkowalski/vue-sonner) for toasts
+- PWA via [vite-plugin-pwa](https://vite-plugin-pwa.netlify.app/)
+- Native Web Share API
 
-## Customize configuration
+## Getting Started
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Recommended IDE Setup
 
-## Project Setup
+- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+### Project Setup
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Development
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Type-Check, Build, and Preview
 
 ```sh
+npm run type-check
 npm run build
+npm run preview
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Testing
 
-```sh
-npm run test:unit
-```
+- **Unit tests:**
+  ```sh
+  npm run test:unit
+  ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
+### Linting, Formatting & Coverage
 
 ```sh
 npm run lint
+npm run format
+npm run coverage
 ```
+
+Code coverage is powered by [Istanbul](https://istanbul.js.org/) via Vitest. Run `npm run coverage` to generate a coverage report.
+
+## Folder Structure
+
+- `src/components/` – UI and feature components (PokeballButton, PokemonTable, ChadCN atoms, etc.)
+- `src/views/` – Main app views (PokedexView, PokemonDetailsView, etc.)
+- `src/stores/` – Pinia stores
+- `src/composables/` – Custom composables (pagination, filters, etc.)
+- `src/lib/models/` – TypeScript models and utilities
+- `src/lib/queries/` – TanStack Query composables
+- `src/lib/api/` – Modular API layer for data fetching
+- `public/` – Static assets (SVGs, icons)
+
+## License
+
+MIT
