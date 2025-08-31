@@ -11,39 +11,59 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+
       includeAssets: ['normal_pokeball.png', 'ultra_ball.svg'],
       manifest: {
         name: 'Bloq-it Pokédex',
         short_name: 'Pokédex',
-        start_url: '.',
+        start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#1976d2',
         icons: [
+          { src: '72.png', sizes: '72x72', type: 'image/png' },
+          { src: '128.png', sizes: '128x128', type: 'image/png' },
+          { src: '144.png', sizes: '144x144', type: 'image/png' },
+          { src: '192.png', sizes: '192x192', type: 'image/png' },
+          { src: '512.png', sizes: '512x512', type: 'image/png' },
+        ],
+      },
+      workbox: {
+        // Serve index.html when offline on navigation requests
+        navigateFallback: '/index.html',
+
+        // Runtime caching strategies
+        runtimeCaching: [
           {
-            src: '72.png',
-            sizes: '72x72',
-            type: 'image/png',
+            // Cache app shell/pages
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+            },
           },
           {
-            src: '128.png',
-            sizes: '128x128',
-            type: 'image/png',
+            // Cache CSS, JS, workers
+            urlPattern: ({ request }) =>
+              request.destination === 'style' ||
+              request.destination === 'script' ||
+              request.destination === 'worker',
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'assets-cache',
+            },
           },
           {
-            src: '144.png',
-            sizes: '144x144',
-            type: 'image/png',
-          },
-          {
-            src: '192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            // Cache images
+            urlPattern: ({ request }) => request.destination === 'image',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 60,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+              },
+            },
           },
         ],
       },
