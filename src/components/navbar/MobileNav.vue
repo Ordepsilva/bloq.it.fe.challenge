@@ -26,9 +26,14 @@ import NavLink from '@/components/ui/navigation-menu/NavLink.vue';
         </svg>
       </Button>
     </SheetTrigger>
-    <SheetContent side="left" class="flex flex-col space-y-2 p-4">
-      <NavLink to="/">Pokémon</NavLink>
-      <NavLink to="/pokedex">My Pokédex</NavLink>
+    <SheetContent
+      side="left"
+      class="flex flex-col space-y-2 p-4 bg-gradient-to-br from-yellow-100 via-red-100 to-blue-100 shadow-xl"
+    >
+      <NavLink to="/" class="font-bold text-red-600 hover:text-yellow-600 text-lg">Pokémon</NavLink>
+      <NavLink to="/pokedex" class="text-blue-700 hover:text-yellow-600 text-lg"
+        >My Pokédex</NavLink
+      >
     </SheetContent>
   </Sheet>
 </template>

@@ -89,8 +89,11 @@ function selectType(type: PokemonType) {
       <Button
         variant="ghost"
         size="icon"
-        class="hover:bg-gray-200 relative"
-        :class="store.activeFilterCount > 0 ? 'bg-blue-500' : ''"
+        class="hover:bg-gray-200 relative transition"
+        :class="[
+          store.activeFilterCount > 0 ? 'bg-blue-500 text-white' : '',
+          showFilters ? 'ring-2 ring-blue-400 bg-blue-100 shadow-lg' : '',
+        ]"
         title="Filters & Sorting"
         tooltip="Filters & Sorting"
         data-testid="filter-popover-trigger"
@@ -100,8 +103,7 @@ function selectType(type: PokemonType) {
     </PopoverTrigger>
 
     <PopoverContent
-      class="w-full max-w-xs sm:w-64 p-4 mr-2 sm:mr-6 rounded-lg shadow-lg flex flex-col gap-4"
-      style="max-height: 80vh; overflow-y: auto; min-width: 0"
+      class="w-full max-w-xs sm:w-64 p-4 mr-2 sm:mr-6 sm:mb-6 rounded-lg shadow-lg flex flex-col gap-4 h-80 overflow-y-auto md:h-auto"
     >
       <div class="flex flex-col gap-2">
         <span class="font-semibold text-gray-700">Sort by</span>

@@ -15,13 +15,18 @@ const emit = defineEmits<{
 
 const localValue = computed({
   get: () => props.modelValue,
-  set: (value: ViewModes) => emit('update:modelValue', value),
+  set: (value: ViewModes) => {
+    if (value !== props.modelValue) {
+      emit('update:modelValue', value);
+    }
+  },
 });
 </script>
 
 <template>
   <ToggleGroup v-model="localValue" type="single" class="flex" :disabled="props.disabled">
     <ToggleGroupItem
+      :disabled="modelValue == 'table'"
       value="table"
       class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
     >
@@ -29,6 +34,7 @@ const localValue = computed({
     </ToggleGroupItem>
     <ToggleGroupItem
       value="cards"
+      :disabled="modelValue == 'cards'"
       class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
     >
       <LayoutGrid class="h-5 w-5" />
