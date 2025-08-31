@@ -25,7 +25,7 @@ export function useGetPokemonsCount() {
   });
 }
 
-export function useGetPokemon(idOrName: number | string) {
+export function useGetPokemon(idOrName: number | string, enabled?: boolean) {
   const store = usePokedexStore();
 
   return useQuery<Pokemon | PokemonCaughtEntry>({
@@ -36,12 +36,14 @@ export function useGetPokemon(idOrName: number | string) {
       const entry = store.caughtPokemons[numericId];
       return entry ? { ...entry } : undefined;
     },
+    enabled: () => enabled,
   });
 }
 
-export function useGetPokemonEvolutions(pokemonId: number) {
+export function useGetPokemonEvolutions(pokemonId: number, enabled?: boolean) {
   return useQuery<PokemonEvolution[]>({
     queryKey: [QUERY_KEYS.pokemonEvolutions, pokemonId],
     queryFn: () => getPokemonEvolutions(pokemonId),
+    enabled: () => enabled,
   });
 }

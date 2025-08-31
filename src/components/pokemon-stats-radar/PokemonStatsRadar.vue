@@ -71,7 +71,7 @@ onMounted(() => {
       <CardDescription> Showing base stats for this Pokémon </CardDescription>
     </CardHeader>
     <CardContent class="pb-0 flex justify-center">
-      <canvas ref="chartRef" class="w-50 h-50 md:!w-100 md:!h-100"></canvas>
+      <canvas ref="chartRef" class="size-50 md:!size-100"></canvas>
     </CardContent>
     <CardFooter class="flex-col gap-2 text-sm">
       <div class="flex items-center gap-2 leading-none font-medium">Pokémon stat breakdown</div>

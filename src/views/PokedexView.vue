@@ -75,7 +75,7 @@ function downloadPokedexCsv() {
     <div class="flex items-center gap-2 md:gap-0 flex-col md:flex-row">
       <div class="flex items-center gap-2 md:gap-8 w-full flex-col md:flex-row">
         <div class="flex items-center">
-          <img src="/normal_pokeball.png" alt="Pokeball" class="w-10 h-10" />
+          <img src="/normal_pokeball.png" alt="Pokeball" class="size-10" />
           <h2 class="text-red-600 drop-shadow whitespace-nowrap">My Pokédex</h2>
         </div>
 
@@ -89,7 +89,7 @@ function downloadPokedexCsv() {
       <div class="flex md:items-center gap-2 items-end">
         <div role="button" class="flex items-center gap-1 p-2" title="Download Pokédex CSV">
           <DownloadIcon
-            class="w-5 h-5 text-gray-500 cursor-pointer hover:scale-110"
+            class="size-5 text-gray-500 cursor-pointer hover:scale-110"
             @click="downloadPokedexCsv"
           />
         </div>

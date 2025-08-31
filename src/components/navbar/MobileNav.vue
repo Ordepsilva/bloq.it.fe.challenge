@@ -16,7 +16,7 @@ import NavLink from '@/components/ui/navigation-menu/NavLink.vue';
         <!-- Hamburger Icon -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="!h-10 !w-10 text-gray-700"
+          class="!size-10 text-gray-700"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

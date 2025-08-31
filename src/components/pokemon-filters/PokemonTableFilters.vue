@@ -98,7 +98,7 @@ function selectType(type: PokemonType) {
         tooltip="Filters & Sorting"
         data-testid="filter-popover-trigger"
       >
-        <SlidersHorizontal class="w-5 h-5" />
+        <SlidersHorizontal class="size-5" />
       </Button>
     </PopoverTrigger>
 

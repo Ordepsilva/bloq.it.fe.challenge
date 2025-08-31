@@ -17,21 +17,23 @@ import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/share';
 import { toast } from 'vue-sonner';
 import { ArrowLeftIcon } from 'lucide-vue-next';
+import { useOnlineStatus } from '@/composables/useOnlineStatus';
 
 const route = useRoute();
 
-const id = route.params.id as string;
+const rawId = route.params.id;
+const id = Number(Array.isArray(rawId) ? rawId[0] : rawId);
 const store = usePokedexStore();
 const { isCaught, toggleCaught } = usePokemonCaught();
-
-const { data: pokemon, error, isLoading, isError } = useGetPokemon(id);
+const isOnline = useOnlineStatus();
+const { data: pokemon, error, isLoading, isError } = useGetPokemon(id, isOnline.value);
 const {
   data: evolutions,
   error: evolutionsError,
   isError: isEvolutionsError,
-} = useGetPokemonEvolutions(Number(id));
+} = useGetPokemonEvolutions(id);
 
-const caughtPokemon = computed(() => store.caughtPokemons[Number(id)]);
+const caughtPokemon = computed(() => store.caughtPokemons[id]);
 const typeColor = computed(() => getPokemonCardColor(pokemon.value?.types[0] ?? ''));
 watchEffect(() => {
   if (isError.value) {
@@ -46,12 +48,12 @@ watchEffect(() => {
 });
 
 function addNote(note: string) {
-  store.addNote(Number(id), note);
+  store.addNote(id, note);
   toast.success('Note added!');
 }
 
 function removeNote(index: number) {
-  store.removeNote(Number(id), index);
+  store.removeNote(id, index);
 }
 
 function sharePokemon() {
@@ -68,14 +70,13 @@ function sharePokemon() {
   <div class="max-w-4xl mx-auto">
     <div
       role="button"
-      class="mb-4 cursor-pointer flex text-gray-500 hover:text-red-500"
+      class="mb-4 cursor-pointer w-fit flex text-gray-500 hover:text-red-500"
       @click="$router.back()"
     >
       <ArrowLeftIcon />
       <span>Go Back</span>
     </div>
     <PokemonLoading v-if="isLoading" />
-    <div v-else-if="isError">No Pokemon Found.</div>
     <div v-else-if="pokemon">
       <Card
         class="mb-6 relative overflow-hidden rounded-2xl p-4 shadow-lg border-none"
@@ -88,11 +89,11 @@ function sharePokemon() {
             class="flex items-center p-4 hover:scale-110 transition-transform duration-300 order-2 md:order-1"
             title="Share Pokémon"
           >
-            <Share2 class="w-6 h-6 cursor-pointer text-white" @click="sharePokemon" />
+            <Share2 class="size-6 cursor-pointer text-white" @click="sharePokemon" />
           </div>
           <PokeballButton
             :caught="isCaught(pokemon)"
-            size="w-16 h-16"
+            size="size-16"
             class="order-1 md:order-2"
             @click="toggleCaught(pokemon)"
           />
@@ -102,7 +103,7 @@ function sharePokemon() {
           <img
             :src="pokemon.imgUrl"
             :alt="pokemon.name"
-            class="w-40 h-40 object-contain drop-shadow-lg transition-transform duration-300"
+            class="size-40 object-contain drop-shadow-lg transition-transform duration-300"
           />
           <div class="flex flex-col gap-3 text-center md:text-left">
             <div class="flex items-center gap-2 justify-center md:justify-start">

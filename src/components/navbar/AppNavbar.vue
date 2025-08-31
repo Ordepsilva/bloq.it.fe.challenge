@@ -13,7 +13,7 @@ const isMobile = useIsMobile();
           <img
             src="/ultra_ball.svg"
             alt="Pokeball Logo"
-            class="h-10 w-10 object-contain animate-bounce drop-shadow-lg"
+            class="size-10 object-contain animate-bounce drop-shadow-lg"
           />
         </div>
         <h2 class="font-bold text-2xl font-pokemon tracking-wide drop-shadow">PokéCenter</h2>

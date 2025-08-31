@@ -30,14 +30,14 @@ const localValue = computed({
       value="table"
       class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
     >
-      <Table class="h-5 w-5" />
+      <Table class="size-5" />
     </ToggleGroupItem>
     <ToggleGroupItem
       value="cards"
       :disabled="modelValue == 'cards'"
       class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
     >
-      <LayoutGrid class="h-5 w-5" />
+      <LayoutGrid class="size-5" />
     </ToggleGroupItem>
   </ToggleGroup>
 </template>

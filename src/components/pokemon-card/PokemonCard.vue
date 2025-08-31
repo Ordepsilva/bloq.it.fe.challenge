@@ -46,11 +46,7 @@ const { isCaught, toggleCaught } = usePokemonCaught();
         </CardTitle>
       </div>
       <div class="">
-        <PokeballButton
-          :caught="isCaught(pokemon)"
-          size="w-12 h-12"
-          @click="toggleCaught(pokemon)"
-        />
+        <PokeballButton :caught="isCaught(pokemon)" size="size-12" @click="toggleCaught(pokemon)" />
       </div>
     </CardHeader>
 
@@ -59,7 +55,7 @@ const { isCaught, toggleCaught } = usePokemonCaught();
         :src="pokemon.imgUrl"
         alt="pokemon"
         data-testid="pokemon-image"
-        class="h-30 w-30 transition-transform duration-200 group-hover:scale-110"
+        class="size-30 transition-transform duration-200 group-hover:scale-110"
       />
       <div class="flex flex-col gap-2">
         <PokemonTypeBadge v-for="type in pokemon.types" :key="type" :type="type" />

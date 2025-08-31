@@ -12,14 +12,14 @@ const randomText = funnyText[Math.floor(Math.random() * funnyText.length)];
 
 <template>
   <div class="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center">
-    <img :src="pokeballImg" alt="Pokeball" class="w-24 h-24 animate-bounce" />
+    <img :src="pokeballImg" alt="Pokeball" class="size-24 animate-bounce" />
     <h1 class="text-4xl font-bold text-primary">404 - Pokémon Not Found!</h1>
     <p class="text-lg text-muted-foreground">{{ randomText }}</p>
     <router-link
       to="/"
       class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-blue-500 transition"
     >
-      <ArrowLeft class="w-5 h-5" />
+      <ArrowLeft class="size-5" />
       <span>Go back to Pokédex</span>
     </router-link>
   </div>

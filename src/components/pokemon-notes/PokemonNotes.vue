@@ -44,7 +44,7 @@ const newNote = ref<string>('');
             class="cursor-pointer hover:bg-red-100"
             @click="removeNote(i)"
           >
-            <X class="w-4 h-4 text-red-500" />
+            <X class="size-4 text-red-500" />
           </Button>
         </li>
       </ul>

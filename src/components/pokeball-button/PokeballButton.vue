@@ -22,7 +22,7 @@ const emit = defineEmits<{ (e: 'click'): void }>();
       src="/normal_pokeball.png"
       :alt="props.caught ? 'Pokémon caught' : 'Pokémon not caught'"
       :class="[
-        props.size || 'w-12 h-12',
+        props.size || 'size-12',
         'transition-all duration-300 max-w-none',
         props.caught ? 'opacity-100 grayscale-0 scale-110 drop-shadow-lg' : 'opacity-40 grayscale',
       ]"
