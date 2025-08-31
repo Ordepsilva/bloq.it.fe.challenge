@@ -10,6 +10,7 @@ const emit = defineEmits<{ (e: 'click'): void }>();
 
 <template>
   <div
+    v-bind="$attrs"
     class="cursor-pointer"
     role="button"
     :aria-pressed="props.caught"

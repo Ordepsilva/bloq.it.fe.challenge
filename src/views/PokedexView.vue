@@ -79,7 +79,7 @@ function downloadPokedexCsv() {
           <h2 class="text-red-600 drop-shadow whitespace-nowrap">My Pokédex</h2>
         </div>
 
-        <div class="flex w-full items-center gap-2">
+        <div class="flex w-full items-center gap-2 flex-col md:flex-row">
           <span class="px-3 py-1 rounded-full bg-green-200 text-green-800 font-semibold">
             {{ caughtCount }} / {{ count }} caught
           </span>

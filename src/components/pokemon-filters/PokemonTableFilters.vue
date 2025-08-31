@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button';
 import { SlidersHorizontal } from 'lucide-vue-next';
 import { Input } from '@/components/ui/input';
+import PokemonTypeBadge from '../pokemon-type-badge/PokemonTypeBadge.vue';
 
 const props = defineProps<{
   searchName: string;
@@ -26,8 +27,8 @@ const emit = defineEmits<{
 const showFilters = ref(false);
 const sortKey = ref<SortingColumns>(props.sortBy);
 const sortDir = ref<SortingDirections>(props.sortDir);
-const filterKey = ref<'name' | 'type'>('name');
-const filterValue = ref(props.searchName);
+const filterName = ref(props.searchName);
+const filterType = ref(props.selectedType);
 
 const store = usePokedexStore();
 const capitalizedTypes = computed(() =>
@@ -47,37 +48,38 @@ const sortingColumns: { key: SortingColumns; label: string }[] = [
     key: 'name',
     label: 'Name',
   },
+  { key: 'height', label: 'Height' },
+  { key: 'weight', label: 'Weight' },
   {
     key: 'timestamp',
     label: 'Date Caught',
   },
-  { key: 'height', label: 'Height' },
-  { key: 'weight', label: 'Weight' },
-];
-
-const filterColumns: { key: 'name' | 'type'; label: string }[] = [
-  { key: 'name', label: 'Name' },
-  { key: 'type', label: 'Type' },
 ];
 
 function applyFilters() {
   emit('update:sortBy', sortKey.value);
   emit('update:sortDir', sortDir.value);
-  if (filterKey.value === 'name') {
-    emit('update:searchName', filterValue.value);
-    emit('update:selectedType', null);
-  } else {
-    emit('update:selectedType', filterValue.value as PokemonType);
-    emit('update:searchName', '');
-  }
+  emit('update:searchName', filterName.value);
+  emit('update:selectedType', filterType.value);
+}
+
+function resetFilters() {
+  sortKey.value = 'id';
+  sortDir.value = 'asc';
+  filterName.value = '';
+  filterType.value = null;
+  emit('update:sortBy', 'id');
+  emit('update:sortDir', 'asc');
+  emit('update:searchName', '');
+  emit('update:selectedType', null);
 }
 
 function selectType(type: PokemonType) {
-  if (filterValue.value === type) {
-    filterValue.value = '';
+  if (filterType.value === type) {
+    filterType.value = null;
     return;
   }
-  filterValue.value = type;
+  filterType.value = type;
 }
 </script>
 
@@ -96,9 +98,13 @@ function selectType(type: PokemonType) {
       </Button>
     </PopoverTrigger>
 
-    <PopoverContent class="w-64 p-4 mr-6 bg-white rounded-xl shadow-lg flex flex-col gap-4">
+    <PopoverContent
+      class="w-full max-w-xs sm:w-64 p-4 mr-2 sm:mr-6 rounded-lg shadow-lg flex flex-col gap-4"
+      style="max-height: 80vh; overflow-y: auto; min-width: 0"
+    >
       <div class="flex flex-col gap-2">
         <span class="font-semibold text-gray-700">Sort by</span>
+
         <div class="flex gap-2 flex-wrap">
           <Button
             v-for="sortColumn in sortingColumns"
@@ -109,8 +115,10 @@ function selectType(type: PokemonType) {
             @click="sortKey = sortColumn.key"
             >{{ sortColumn.label }}</Button
           >
-
-          <Button size="sm" variant="ghost" @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'">
+        </div>
+        <div class="flex gap-2 flex-col">
+          <span class="font-semibold text-gray-700">Sort Direction</span>
+          <Button size="sm" variant="outline" @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'">
             {{ sortDir === 'asc' ? '↑ Asc' : '↓ Desc' }}
           </Button>
         </div>
@@ -118,44 +126,26 @@ function selectType(type: PokemonType) {
 
       <div class="flex flex-col gap-2">
         <span class="font-semibold text-gray-700">Filter by</span>
-        <div class="flex gap-2 flex-wrap">
-          <Button
-            v-for="filterColumn in filterColumns"
-            :key="filterColumn.key"
-            size="sm"
-            variant="outline"
-            :class="filterKey === filterColumn.key ? 'bg-gray-200' : ''"
-            @click="filterKey = filterColumn.key"
-            >{{ filterColumn.label }}</Button
-          >
-        </div>
-
-        <div>
-          <template v-if="filterKey === 'name'">
-            <Input v-model="filterValue" placeholder="Search name..." class="w-full" />
-          </template>
-
-          <template v-else>
-            <div class="flex flex-wrap gap-1 mt-1">
-              <Button
-                v-for="type in capitalizedTypes"
-                :key="type.value"
-                size="sm"
-                variant="outline"
-                :class="[
-                  filterValue === type.value ? 'ring-2 ring-offset-1 ring-black' : '',
-                  type.color,
-                ]"
-                @click="selectType(type.value)"
-              >
-                {{ type.label }}
-              </Button>
-            </div>
-          </template>
+        <Input v-model="filterName" placeholder="Search name..." class="w-full mb-2" />
+        <div class="flex flex-wrap gap-2 mt-1">
+          <PokemonTypeBadge
+            v-for="type in capitalizedTypes"
+            :key="type.value"
+            :type="type.value"
+            class="cursor-pointer"
+            :class="[
+              filterType === type.value ? 'ring-2 ring-offset-1 ring-black' : '',
+              type.color,
+            ]"
+            @click="selectType(type.value)"
+          />
         </div>
       </div>
 
-      <Button variant="secondary" @click="applyFilters()" class="mt-2">Apply</Button>
+      <div class="flex flex-col sm:flex-row gap-2 mt-2 w-full">
+        <Button variant="secondary" size="sm" @click="applyFilters()">Apply</Button>
+        <Button variant="outline" size="sm" class="clear" @click="resetFilters()">Reset</Button>
+      </div>
     </PopoverContent>
   </Popover>
 </template>
