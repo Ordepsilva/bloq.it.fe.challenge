@@ -93,6 +93,7 @@ function selectType(type: PokemonType) {
         :class="store.activeFilterCount > 0 ? 'bg-blue-500' : ''"
         title="Filters & Sorting"
         tooltip="Filters & Sorting"
+        data-testid="filter-popover-trigger"
       >
         <SlidersHorizontal class="w-5 h-5" />
       </Button>
@@ -109,6 +110,7 @@ function selectType(type: PokemonType) {
           <Button
             v-for="sortColumn in sortingColumns"
             :key="sortColumn.key"
+            :data-testid="`sort-column-${sortColumn.label}`"
             size="sm"
             variant="outline"
             :class="sortKey === sortColumn.key ? 'bg-blue-500 text-white' : ''"
@@ -118,7 +120,12 @@ function selectType(type: PokemonType) {
         </div>
         <div class="flex gap-2 flex-col">
           <span class="font-semibold text-gray-700">Sort Direction</span>
-          <Button size="sm" variant="outline" @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'">
+          <Button
+            data-testid="sort-direction"
+            size="sm"
+            variant="outline"
+            @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'"
+          >
             {{ sortDir === 'asc' ? '↑ Asc' : '↓ Desc' }}
           </Button>
         </div>
@@ -126,12 +133,18 @@ function selectType(type: PokemonType) {
 
       <div class="flex flex-col gap-2">
         <span class="font-semibold text-gray-700">Filter by</span>
-        <Input v-model="filterName" placeholder="Search name..." class="w-full mb-2" />
+        <Input
+          v-model="filterName"
+          data-testid="filter-name"
+          placeholder="Search name..."
+          class="w-full mb-2"
+        />
         <div class="flex flex-wrap gap-2 mt-1">
           <PokemonTypeBadge
             v-for="type in capitalizedTypes"
             :key="type.value"
             :type="type.value"
+            :data-testid="`filter-type-${type.value}`"
             class="cursor-pointer"
             :class="[
               filterType === type.value ? 'ring-2 ring-offset-1 ring-black' : '',
