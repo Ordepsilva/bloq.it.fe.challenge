@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>();
 
 const localValue = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue ?? 'cards',
   set: (value: ViewModes) => {
     if (value !== props.modelValue) {
       emit('update:modelValue', value);

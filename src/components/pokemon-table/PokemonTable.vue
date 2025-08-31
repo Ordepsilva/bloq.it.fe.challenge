@@ -13,9 +13,12 @@ import { getPokemonCardHoverColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 import { usePokemonCaught } from '@/composables/usePokemonCaught';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
+import { useOnlineStatus } from '@/composables/useOnlineStatus';
 const props = defineProps<{
   pokemons: Pokemon[];
 }>();
+
+const isOnline = useOnlineStatus();
 
 const { isCaught, toggleCaught } = usePokemonCaught();
 const router = useRouter();
@@ -43,9 +46,19 @@ const router = useRouter();
       </TableHeader>
 
       <TableBody>
-        <TableRow v-if="props.pokemons.length === 0">
-          <TableCell colspan="14" class="text-center p-4"> No Pokemons Found. </TableCell>
-        </TableRow>
+        <template v-if="!isOnline">
+          <TableRow class="bg-yellow-100">
+            <TableCell colspan="14" class="text-center p-4 text-yellow-800">
+              You are offline. Please go back online to get the latest Pokemons.
+            </TableCell>
+          </TableRow>
+        </template>
+        <template v-else-if="props.pokemons.length === 0 && isOnline">
+          <TableRow>
+            <TableCell colspan="14" class="text-center p-4"> No Pokemons Found. </TableCell>
+          </TableRow>
+        </template>
+
         <TableRow
           v-else
           v-for="pokemon in props.pokemons"
