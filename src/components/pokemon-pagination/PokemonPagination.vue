@@ -36,7 +36,6 @@ const pagesToShow = computed(() => {
 
 const totalPages = computed(() => Math.ceil(props.total / props.perPage));
 
-/* TODO: Persist pagination in URL -> enhancement*/
 function goToPage(page: number) {
   if (!props.loading && page >= 1 && page <= totalPages.value) {
     emit('update:page', page);
@@ -78,6 +77,7 @@ function goToPage(page: number) {
       </PaginationItem>
 
       <PaginationNext
+        data-test="pagination-next"
         :disabled="props.page === totalPages || props.loading"
         href="#"
         @click.prevent="goToPage(props.page + 1)"

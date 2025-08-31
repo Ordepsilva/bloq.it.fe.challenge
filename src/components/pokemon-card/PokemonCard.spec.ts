@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import PokemonCard from './PokemonCard.vue';
 import { getPokemonCardColor } from '@/lib/models/colors';
+import { createPinia } from 'pinia';
 
 describe('PokemonCard', () => {
   it('renders all key info, PokeballButton, and type-based background', () => {
@@ -25,10 +26,13 @@ describe('PokemonCard', () => {
           base_experience: 64,
         },
       },
+      global: {
+        plugins: [createPinia()],
+      },
     });
     // Name and image
     expect(wrapper.text()).toContain('Bulbasaur');
-    expect(wrapper.find('img').attributes('src')).toBe('img-url');
+    expect(wrapper.find('[data-testid="pokemon-image"]').attributes('src')).toBe('img-url');
     // Types
     expect(wrapper.text()).toContain('grass');
     // PokeballButton

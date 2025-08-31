@@ -58,6 +58,7 @@ const { isCaught, toggleCaught } = usePokemonCaught();
       <img
         :src="pokemon.imgUrl"
         alt="pokemon"
+        data-testid="pokemon-image"
         class="h-30 w-30 transition-transform duration-200 group-hover:scale-110"
       />
       <div class="flex flex-col gap-2">
