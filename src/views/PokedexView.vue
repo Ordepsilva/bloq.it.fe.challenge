@@ -13,7 +13,7 @@ import type { ViewModes } from '@/lib/models/common';
 import { exportPokemonsToCsv } from '@/lib/models/pokemon';
 import { Progress } from '@/components/ui/progress';
 import { useGetPokemonsCount } from '@/lib/queries/pokemons';
-import { downloadCsv } from '@/lib/csv';
+import { downloadCsv } from '@/lib/utils';
 import { DownloadIcon } from 'lucide-vue-next';
 import { useFiltersQuery } from '@/composables/useFiltersQuery';
 import { toast } from 'vue-sonner';

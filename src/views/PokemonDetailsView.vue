@@ -14,7 +14,7 @@ import { Share2 } from 'lucide-vue-next';
 import PokemonStatsRadar from '@/components/pokemon-stats-radar/PokemonStatsRadar.vue';
 import PokemonEvolutions from '@/components/pokemon-evolutions/PokemonEvolutions.vue';
 import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
-import { share } from '@/lib/share';
+import { share } from '@/lib/utils';
 import { toast } from 'vue-sonner';
 import { ArrowLeftIcon } from 'lucide-vue-next';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';

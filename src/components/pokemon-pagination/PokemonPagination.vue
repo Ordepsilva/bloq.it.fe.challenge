@@ -9,12 +9,12 @@ import {
 } from '@/components/ui/pagination';
 import { computed } from 'vue';
 
-interface PaginationProps {
+type PaginationProps = {
   total: number;
   perPage: number;
   page: number;
   loading?: boolean;
-}
+};
 
 const props = defineProps<PaginationProps>();
 
