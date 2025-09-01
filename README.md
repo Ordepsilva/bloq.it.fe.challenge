@@ -83,6 +83,22 @@ Code coverage is powered by [Istanbul](https://istanbul.js.org/) via Vitest. Run
 - `src/lib/api/` – Modular API layer for data fetching
 - `public/` – Static assets (SVGs, icons)
 
+## Next Steps
+
+- Add Pokémon Abilities to details page
+- Improve filter UI/UX and add multi-type selection
+- Add Pokémon comparison feature (side-by-side stats)
+- Implement dark mode toggle
+- Add favorite/starred Pokémon functionality
+- Integrate Pokémon locations and habitat info
+- Add advanced sorting (by stat, experience, etc.)
+- Support bulk catch/release actions
+- Add accessibility improvements (keyboard navigation, ARIA labels)
+- Add internationalization (i18n) for multi-language support
+- Add more comprehensive unit and integration tests
+- Enable sharing caught Pokémon as images/cards
+- Add user profile and sync caught Pokémon across devices
+
 ## License
 
 MIT
