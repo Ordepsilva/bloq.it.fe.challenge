@@ -12,7 +12,6 @@ export const usePokedexStore = defineStore(
   () => {
     const caughtPokemons = ref<Record<number, PokemonCaughtEntry>>({});
 
-    const queryClient = useQueryClient();
     const currentPage = ref(1);
     const itemsPerPage = ref(PER_PAGE);
 
@@ -35,6 +34,8 @@ export const usePokedexStore = defineStore(
     });
 
     function toggleCaught(pokemon: Pokemon) {
+      const queryClient = useQueryClient();
+
       if (caughtPokemons.value[pokemon.id]) {
         delete caughtPokemons.value[pokemon.id];
         return;

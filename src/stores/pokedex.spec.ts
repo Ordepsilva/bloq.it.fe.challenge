@@ -1,9 +1,18 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { usePokedexStore } from './pokedex';
 import type { Pokemon } from '@/lib/models/pokemon';
 
+vi.mock('@tanstack/vue-query', () => ({
+  useQueryClient: () => ({
+    setQueryData: vi.fn(),
+  }),
+}));
 describe('usePokedexStore', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
+
   it('counts active filters correctly', () => {
     const store = usePokedexStore();
     expect(store.activeFilterCount).toBe(0);
@@ -86,9 +95,6 @@ describe('usePokedexStore', () => {
     const store = usePokedexStore();
     expect(() => store.addNote(999, 'Ghost note')).not.toThrow();
     expect(() => store.removeNote(999, 0)).not.toThrow();
-  });
-  beforeEach(() => {
-    setActivePinia(createPinia());
   });
 
   it('adds and removes notes', () => {
