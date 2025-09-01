@@ -97,7 +97,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     height,
     weight,
     base_experience: base_experience ?? 0,
-    imgUrl: sprites.other['official-artwork'].front_default ?? '',
+    imgUrl: sprites.other['official-artwork'].front_default ?? '/placeholder.png',
     types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),
     stats: mappedStats,
   };
