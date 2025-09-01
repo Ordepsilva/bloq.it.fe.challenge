@@ -29,7 +29,7 @@ export type PokemonAbilities = {
 export type PokemonEvolution = {
   id: number;
   name: string;
-  imgUrl: string;
+  imgUrl: string | null;
 };
 
 export type PokemonCaughtEntry = Pokemon & { notes: string[]; timestamp: number };
