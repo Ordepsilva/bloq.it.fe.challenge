@@ -1,6 +1,4 @@
 <script>
-  // Grab current path (e.g. /pokedex, /pokemon/25)
-  var redirect = window.location.pathname.replace('/bloq.it.fe.challenge', '');
-  // Redirect to index.html, but stash the original path in the hash
-  window.location.replace('/bloq.it.fe.challenge/index.html#' + redirect + window.location.search);
+  /* workaround for 404 errors in github pages */
+  location.replace('/bloq.it.fe.challenge/index.html' + location.search + location.hash);
 </script>
