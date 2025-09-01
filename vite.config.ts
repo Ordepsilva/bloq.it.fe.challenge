@@ -6,12 +6,12 @@ import path from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/bloq.it.fe.challenge/',
   plugins: [
     vue(),
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-
       includeAssets: ['normal_pokeball.png', 'ultra_ball.svg'],
       manifest: {
         name: 'Bloq-it Pokédex',
