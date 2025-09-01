@@ -9,11 +9,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(timestamp: number) {
   const date = new Date(timestamp);
-  return date.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 export type ShareOptions = {
