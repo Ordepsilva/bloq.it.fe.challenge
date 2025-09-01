@@ -26,7 +26,11 @@ const props = defineProps<{
           :key="evo.name"
         >
           <div class="flex flex-col items-center justify-center p-3 min-w-[120px]">
-            <img :src="evo.imgUrl" :alt="evo.name" class="size-16 object-contain mb-2" />
+            <img
+              :src="evo.imgUrl ?? '/placeholder.png'"
+              :alt="evo.name"
+              class="size-16 object-contain mb-2"
+            />
             <span class="font-bold">#{{ evo.id }} {{ evo.name }}</span>
           </div>
           <template v-if="i < props.evolutions.length - 1">
