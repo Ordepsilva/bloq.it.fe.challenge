@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/bloq-it-fe-challenge/sw.js', { scope: '/bloq-it-fe-challenge/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/bloq.it.fe.challenge/sw.js', { scope: '/bloq.it.fe.challenge/' })})}
