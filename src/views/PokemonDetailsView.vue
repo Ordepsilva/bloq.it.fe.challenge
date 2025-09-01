@@ -54,6 +54,7 @@ function addNote(note: string) {
 
 function removeNote(index: number) {
   store.removeNote(id, index);
+  toast.success('Note removed!');
 }
 
 function sharePokemon() {

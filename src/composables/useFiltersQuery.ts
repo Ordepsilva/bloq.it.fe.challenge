@@ -1,5 +1,6 @@
 import type { SortingColumns, SortingDirections } from '@/lib/models/common';
 import { POKEMON_TYPES, type PokemonType } from '@/lib/models/pokemon';
+import { getQueryValue } from '@/lib/utils';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -9,12 +10,6 @@ type FilterDefaults = {
   sortBy?: SortingColumns;
   sortDir?: SortingDirections;
 };
-
-function getQueryValue(value: unknown): string | null {
-  if (Array.isArray(value)) return value[0] ?? null;
-  if (typeof value === 'string') return value;
-  return null;
-}
 
 function isPokemonType(value: unknown): value is PokemonType {
   return typeof value === 'string' && POKEMON_TYPES.includes(value as PokemonType);
