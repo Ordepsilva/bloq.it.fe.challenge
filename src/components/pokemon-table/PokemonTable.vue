@@ -55,7 +55,11 @@ const router = useRouter();
             @click="router.push(`/pokemon/${pokemon.id}`)"
           >
             <TableCell>
-              <img :src="pokemon.imgUrl" :alt="pokemon.name" class="size-12 object-contain" />
+              <img
+                :src="pokemon.imgUrl ?? '/placeholder.png'"
+                :alt="pokemon.name"
+                class="size-12 object-contain"
+              />
             </TableCell>
 
             <TableCell class="w-12">

@@ -52,7 +52,7 @@ const { isCaught, toggleCaught } = usePokemonCaught();
 
     <CardContent class="flex justify-between items-center relative z-10">
       <img
-        :src="pokemon.imgUrl"
+        :src="pokemon.imgUrl ?? '/placeholder.png'"
         alt="pokemon"
         data-testid="pokemon-image"
         class="size-30 transition-transform duration-200 group-hover:scale-110"

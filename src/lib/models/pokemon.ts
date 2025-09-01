@@ -4,7 +4,7 @@ import { formatDate } from '../utils';
 export type Pokemon = {
   id: number;
   name: string;
-  imgUrl: string;
+  imgUrl: string | null;
   types: PokemonType[];
   height: number;
   weight: number;
@@ -97,7 +97,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     height,
     weight,
     base_experience: base_experience ?? 0,
-    imgUrl: sprites.other['official-artwork'].front_default ?? '/placeholder.png',
+    imgUrl: sprites.other['official-artwork'].front_default ?? null,
     types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),
     stats: mappedStats,
   };

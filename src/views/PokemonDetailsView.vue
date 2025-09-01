@@ -102,7 +102,7 @@ function sharePokemon() {
 
         <CardHeader class="flex flex-col md:flex-row items-center gap-6 py-6">
           <img
-            :src="pokemon.imgUrl"
+            :src="pokemon.imgUrl ?? '/placeholder.png'"
             :alt="pokemon.name"
             class="size-40 object-contain drop-shadow-lg transition-transform duration-300"
           />
