@@ -16,6 +16,7 @@ import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';
 const props = defineProps<{
   pokemons: Pokemon[];
+  hasFiltersActive: boolean;
 }>();
 
 const isOnline = useOnlineStatus();
@@ -83,6 +84,13 @@ const router = useRouter();
             <TableCell> {{ pokemon.stats.speed }} </TableCell>
             <TableCell> {{ pokemon.stats.specialAttack }} </TableCell>
             <TableCell> {{ pokemon.stats.specialDefense }} </TableCell>
+          </TableRow>
+        </template>
+        <template v-else-if="props.hasFiltersActive">
+          <TableRow>
+            <TableCell colspan="14" class="text-center p-4">
+              No Pokemons match your filters.
+            </TableCell>
           </TableRow>
         </template>
         <template v-else-if="!isOnline">

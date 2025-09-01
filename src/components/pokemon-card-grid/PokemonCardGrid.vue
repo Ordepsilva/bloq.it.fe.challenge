@@ -3,7 +3,7 @@ import type { Pokemon } from '@/lib/models/pokemon';
 import PokemonCard from '@/components/pokemon-card/PokemonCard.vue';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';
 
-const props = defineProps<{ pokemons: Pokemon[] }>();
+const props = defineProps<{ pokemons: Pokemon[]; hasFiltersActive: boolean }>();
 const isOnline = useOnlineStatus();
 </script>
 
@@ -15,6 +15,11 @@ const isOnline = useOnlineStatus();
         :key="pokemon.id"
         :pokemon="pokemon"
       ></PokemonCard>
+    </template>
+    <template v-else-if="props.hasFiltersActive">
+      <div class="text-center w-full py-8 text-gray-500 text-lg">
+        No Pokémons match your filters.
+      </div>
     </template>
     <template v-else-if="!isOnline">
       <div class="text-center w-full py-8 text-gray-500 text-lg">

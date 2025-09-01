@@ -104,14 +104,22 @@ function downloadPokedexCsv() {
       </div>
     </div>
 
-    <PokemonTable v-if="effectiveView === 'table'" :pokemons="store.paginatedPokemons" />
-    <PokemonCardGrid v-else :pokemons="store.paginatedPokemons" />
+    <PokemonTable
+      v-if="effectiveView === 'table'"
+      :pokemons="store.paginatedPokemons"
+      :hasFiltersActive="store.activeFilterCount > 0"
+    />
+    <PokemonCardGrid
+      v-else
+      :pokemons="store.paginatedPokemons"
+      :hasFiltersActive="store.activeFilterCount > 0"
+    />
 
     <PokemonPagination
       v-if="store.filteredPokemons.length > PER_PAGE"
       class="mt-2"
       :page="store.currentPage"
-      :per-page="store.itemsPerPage"
+      :perPage="store.itemsPerPage"
       :total="store.filteredPokemons.length"
       @update:page="handlePageUpdate"
     />
