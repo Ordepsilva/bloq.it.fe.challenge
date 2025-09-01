@@ -94,7 +94,7 @@ const router = useRouter();
           </TableRow>
         </template>
         <template v-else-if="!isOnline">
-          <TableRow class="bg-yellow-100">
+          <TableRow class="bg-yellow-100" data-testid="offline-row">
             <TableCell colspan="14" class="text-center p-4 text-yellow-800">
               You are offline. Please go back online to get the latest Pokemons.
             </TableCell>

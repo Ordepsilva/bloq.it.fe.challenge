@@ -65,15 +65,23 @@ describe('PokemonTable', () => {
   });
   it('renders "No Pokemons Found" if list is empty', () => {
     const wrapper = mount(PokemonTable, {
-      props: { pokemons: [] },
+      props: { pokemons: [], hasFiltersActive: false },
     });
 
     expect(wrapper.text()).toContain('No Pokemons Found.');
   });
 
+  it('renders "No Pokemons match your filters." if list is empty', () => {
+    const wrapper = mount(PokemonTable, {
+      props: { pokemons: [], hasFiltersActive: true },
+    });
+
+    expect(wrapper.text()).toContain('No Pokemons match your filters.');
+  });
+
   it('renders rows for each pokemon', () => {
     const wrapper = mount(PokemonTable, {
-      props: { pokemons: samplePokemons },
+      props: { pokemons: samplePokemons, hasFiltersActive: false },
     });
 
     // two pokemon rows
@@ -85,9 +93,25 @@ describe('PokemonTable', () => {
     expect(wrapper.text()).toContain('charmander');
   });
 
+  it('shows offline message when no pokemons and offline', async () => {
+    // Mock useOnlineStatus composable to return false
+    vi.resetModules();
+    vi.doMock('@/composables/useOnlineStatus', () => ({
+      useOnlineStatus: () => false,
+    }));
+    const { default: PokemonTable } = await import('./PokemonTable.vue');
+
+    const wrapper = mount(PokemonTable, {
+      props: { pokemons: [], hasFiltersActive: false },
+    });
+    expect(wrapper.find('[data-testid="offline-row"]').text()).toContain(
+      'You are offline. Please go back online to get the latest Pokemons.',
+    );
+  });
+
   it('navigates when row is clicked', async () => {
     const wrapper = mount(PokemonTable, {
-      props: { pokemons: samplePokemons },
+      props: { pokemons: samplePokemons, hasFiltersActive: false },
     });
 
     const firstRow = wrapper.find('tbody tr');
@@ -98,7 +122,7 @@ describe('PokemonTable', () => {
 
   it('renders type badges', () => {
     const wrapper = mount(PokemonTable, {
-      props: { pokemons: [samplePokemons[0]] },
+      props: { pokemons: [samplePokemons[0]], hasFiltersActive: false },
     });
 
     // check that type badges appear
