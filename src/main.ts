@@ -6,9 +6,10 @@ import router from './router';
 import AppLayout from './layouts/AppLayout.vue';
 import { VueQueryPlugin, type VueQueryPluginOptions } from '@tanstack/vue-query';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import { registerSW } from 'virtual:pwa-register';
+registerSW();
 
 const app = createApp(AppLayout);
-
 const vueQueryOptions: VueQueryPluginOptions = {
   queryClientConfig: {
     defaultOptions: {
