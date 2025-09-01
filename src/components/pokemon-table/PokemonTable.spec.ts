@@ -109,6 +109,32 @@ describe('PokemonTable', () => {
     );
   });
 
+  it('shows placeholder image when imgUrl is missing', () => {
+    const pokemon = {
+      id: 4,
+      name: 'charmander',
+      imgUrl: null,
+      types: ['fire'],
+      height: 6,
+      weight: 85,
+      stats: {
+        hp: 39,
+        attack: 52,
+        defense: 43,
+        specialAttack: 60,
+        specialDefense: 50,
+        speed: 65,
+      },
+      base_experience: 64,
+      // ...other required fields
+    } as Pokemon;
+    const wrapper = mount(PokemonTable, {
+      props: { pokemons: [pokemon], hasFiltersActive: false },
+    });
+    const img = wrapper.find('[data-testid=\"pokemon-image\"]');
+    expect(img.attributes('src')).toBe('/placeholder.png');
+  });
+
   it('navigates when row is clicked', async () => {
     const wrapper = mount(PokemonTable, {
       props: { pokemons: samplePokemons, hasFiltersActive: false },

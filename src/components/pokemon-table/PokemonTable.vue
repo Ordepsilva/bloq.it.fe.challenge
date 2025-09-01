@@ -56,6 +56,7 @@ const router = useRouter();
           >
             <TableCell>
               <img
+                data-testid="pokemon-image"
                 :src="pokemon.imgUrl ?? '/placeholder.png'"
                 :alt="pokemon.name"
                 class="size-12 object-contain"
