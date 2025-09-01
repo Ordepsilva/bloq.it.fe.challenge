@@ -1,9 +1,18 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import PokemonCard from './PokemonCard.vue';
 import { getPokemonCardColor } from '@/lib/models/colors';
 import { createPinia } from 'pinia';
 
+vi.mock('@tanstack/vue-query', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    actual,
+    useQueryClient: () => ({
+      setQueryData: vi.fn(),
+    }),
+  };
+});
 describe('PokemonCard', () => {
   it('renders all key info, PokeballButton, and type-based background', () => {
     const wrapper = mount(PokemonCard, {

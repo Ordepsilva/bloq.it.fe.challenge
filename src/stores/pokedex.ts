@@ -32,10 +32,8 @@ export const usePokedexStore = defineStore(
       if (sortDir.value !== 'asc') count++;
       return count;
     });
-
+    const queryClient = useQueryClient();
     function toggleCaught(pokemon: Pokemon) {
-      const queryClient = useQueryClient();
-
       if (caughtPokemons.value[pokemon.id]) {
         delete caughtPokemons.value[pokemon.id];
         return;

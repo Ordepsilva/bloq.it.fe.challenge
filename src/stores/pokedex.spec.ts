@@ -3,11 +3,15 @@ import { setActivePinia, createPinia } from 'pinia';
 import { usePokedexStore } from './pokedex';
 import type { Pokemon } from '@/lib/models/pokemon';
 
-vi.mock('@tanstack/vue-query', () => ({
-  useQueryClient: () => ({
-    setQueryData: vi.fn(),
-  }),
-}));
+vi.mock('@tanstack/vue-query', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    actual,
+    useQueryClient: () => ({
+      setQueryData: vi.fn(),
+    }),
+  };
+});
 describe('usePokedexStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia());

@@ -10,6 +10,16 @@ vi.mock('vue-router', () => ({
     push: mockPush,
   }),
 }));
+
+vi.mock('@tanstack/vue-query', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    actual,
+    useQueryClient: () => ({
+      setQueryData: vi.fn(),
+    }),
+  };
+});
 const samplePokemons: Pokemon[] = [
   {
     id: 1,
