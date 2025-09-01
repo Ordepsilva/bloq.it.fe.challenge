@@ -6,7 +6,7 @@ import path from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/',
+  base: '/bloq.it.fe.challenge/',
   plugins: [
     vue(),
     tailwindcss(),

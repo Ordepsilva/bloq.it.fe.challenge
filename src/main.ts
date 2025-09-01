@@ -6,23 +6,9 @@ import router from './router';
 import AppLayout from './layouts/AppLayout.vue';
 import { VueQueryPlugin, type VueQueryPluginOptions } from '@tanstack/vue-query';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-import { registerSW } from 'virtual:pwa-register';
-registerSW({
-  onNeedRefresh() {
-    // Show a toast notification to the user instead of reloading
-    import('vue-sonner').then(({ toast }) => {
-      toast('A new update is available! Please refresh the page when convenient.', {
-        description: 'You can continue using the app offline.',
-        duration: 8000,
-      });
-    });
-  },
-  onOfflineReady() {
-    console.log('App is ready to work offline!');
-  },
-});
 
 const app = createApp(AppLayout);
+
 const vueQueryOptions: VueQueryPluginOptions = {
   queryClientConfig: {
     defaultOptions: {
