@@ -17,6 +17,11 @@ const router = createRouter({
       component: PokemonDetailsPage,
     },
     {
+      /* Redirect for GitHub Pages */
+      path: '/index.html',
+      redirect: '/',
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFoundView,

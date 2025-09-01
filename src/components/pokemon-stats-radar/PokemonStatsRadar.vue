@@ -51,7 +51,15 @@ onMounted(() => {
             grid: { color: '#fbbf24' }, // yellow-400
             pointLabels: { color: '#2563eb', font: { size: 14, weight: 'bold' } },
             min: 0,
-            max: 100,
+            max: Math.max(
+              150,
+              props.stats.hp,
+              props.stats.attack,
+              props.stats.defense,
+              props.stats.specialAttack,
+              props.stats.specialDefense,
+              props.stats.speed,
+            ),
           },
         },
         plugins: {
