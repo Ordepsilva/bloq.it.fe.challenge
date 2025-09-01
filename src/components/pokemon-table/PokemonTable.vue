@@ -16,7 +16,7 @@ import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';
 const props = defineProps<{
   pokemons: Pokemon[];
-  hasFiltersActive: boolean;
+  hasFiltersActive?: boolean;
 }>();
 
 const isOnline = useOnlineStatus();

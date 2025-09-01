@@ -3,7 +3,7 @@ import type { Pokemon } from '@/lib/models/pokemon';
 import PokemonCard from '@/components/pokemon-card/PokemonCard.vue';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';
 
-const props = defineProps<{ pokemons: Pokemon[]; hasFiltersActive: boolean }>();
+const props = defineProps<{ pokemons: Pokemon[]; hasFiltersActive?: boolean }>();
 const isOnline = useOnlineStatus();
 </script>
 
