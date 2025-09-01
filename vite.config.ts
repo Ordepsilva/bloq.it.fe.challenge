@@ -16,7 +16,7 @@ export default defineConfig({
       manifest: {
         name: 'Bloq-it Pokédex',
         short_name: 'Pokédex',
-        start_url: '/',
+        start_url: '/bloq.it.fe.challenge/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#1976d2',
