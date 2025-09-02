@@ -6,7 +6,7 @@ import path from 'node:path';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/bloq.it.fe.challenge/',
+  base: '/',
   plugins: [
     vue(),
     tailwindcss(),
@@ -16,7 +16,7 @@ export default defineConfig({
       manifest: {
         name: 'Bloq-it Pokédex',
         short_name: 'Pokédex',
-        start_url: '/bloq.it.fe.challenge/',
+        start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#1976d2',
