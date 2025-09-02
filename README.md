@@ -1,9 +1,16 @@
 # Pokédex App – bloq-it-fe-challenge
 
+**Installable PWA:**
+This Pokédex is a Progressive Web App (PWA) – you can install it on your mobile device or desktop for a native app-like experience. Works offline, supports home screen install, and runs as a standalone app on any platform.
+
+**[Live Demo on GitHub Pages](https://ordepsilva.github.io/bloq.it.fe.challenge/)**
+
 An advanced Pokédex web app built with Vue 3, Vite, Pinia, TanStack Query, Tailwind CSS, and ChadCN UI components. Features offline support, persistent state, filtering, sorting, pagination, CSV export, and a fun Pokémon-themed UI. Includes native share API integration and a modular API layer.
 
 ## Features
 
+- **Installable PWA:** Add to home screen on mobile or desktop, works offline, and runs as a standalone app
+- Offline support (PWA)
 - Browse, search, and filter Pokémon
 - Catch and release Pokémon (persistent across reloads)
 - Add notes to caught Pokémon
@@ -11,7 +18,6 @@ An advanced Pokédex web app built with Vue 3, Vite, Pinia, TanStack Query, Tail
 - Switch between table and card/grid view modes
 - Pagination and filter state synced with URL
 - Export caught Pokémon to CSV
-- Offline support (PWA)
 - Toast notifications for actions and errors
 - Responsive, mobile-friendly design
 - Native share API for sharing Pokémon details
