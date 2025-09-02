@@ -2,6 +2,7 @@ import type { ClassValue } from 'clsx';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { toast } from 'vue-sonner';
+import { useShare } from '@vueuse/core';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,19 +28,16 @@ export type ShareOptions = {
 };
 
 export async function share({ title, text, url }: ShareOptions) {
-  try {
-    if (navigator.share) {
-      await navigator.share({
-        title,
-        text,
-        url,
-      });
-    } else {
-      await navigator.clipboard.writeText(`${title}\n${text}\n${url}`);
-    }
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-    toast.error('Failed to share');
+  const { share, isSupported } = useShare();
+
+  if (isSupported.value) {
+    await share({ title, text, url }).catch((err) => {
+      console.error('Failed to share: ', err);
+      toast.error('Failed to share');
+    });
+  } else {
+    await navigator.clipboard.writeText(`${title}\n${text}\n${url}`);
+    toast.success('Link copied to clipboard!');
   }
 }
 
