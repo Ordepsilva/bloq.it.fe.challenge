@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import type { Pokemon } from '@/lib/models/pokemon';
+import { isPokemonCaughtEntry, type Pokemon, type PokemonCaughtEntry } from '@/lib/models/pokemon';
 import { getPokemonCardColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 import { computed } from 'vue';
 import PokeballButton from '../pokeball-button/PokeballButton.vue';
 import { usePokemonCaught } from '@/composables/usePokemonCaught';
+import PokemonNotesPreview from '../pokemon-notes-preview/PokemonNotesPreview.vue';
 
 const props = defineProps<{
-  pokemon: Pokemon;
+  pokemon: Pokemon | PokemonCaughtEntry;
 }>();
 
 const router = useRouter();
@@ -43,6 +44,12 @@ const { isCaught, toggleCaught } = usePokemonCaught();
         <span class="font-mono text-4xl text-white/50"> #{{ pokemon.id }} </span>
         <CardTitle class="capitalize text-white/80 group-hover:text-white flex">
           {{ pokemon.name }}
+
+          <PokemonNotesPreview
+            v-if="isPokemonCaughtEntry(pokemon) && pokemon.notes.length > 0"
+            :notes="pokemon.notes"
+            class="inline-block ml-2"
+          />
         </CardTitle>
       </div>
       <div class="">

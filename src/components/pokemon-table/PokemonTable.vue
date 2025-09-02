@@ -7,15 +7,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import type { Pokemon } from '@/lib/models/pokemon';
+import { isPokemonCaughtEntry, type Pokemon, type PokemonCaughtEntry } from '@/lib/models/pokemon';
 import { useRouter } from 'vue-router';
 import { getPokemonCardHoverColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 import { usePokemonCaught } from '@/composables/usePokemonCaught';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';
+import PokemonNotesPreview from '../pokemon-notes-preview/PokemonNotesPreview.vue';
 const props = defineProps<{
-  pokemons: Pokemon[];
+  pokemons: Pokemon[] | PokemonCaughtEntry[];
   hasFiltersActive?: boolean;
 }>();
 
@@ -71,7 +72,15 @@ const router = useRouter();
               />
             </TableCell>
             <TableCell class="capitalize font-semibold min-w-auto">
-              {{ pokemon.name }}
+              <div class="flex items-center gap-2">
+                {{ pokemon.name }}
+
+                <PokemonNotesPreview
+                  v-if="isPokemonCaughtEntry(pokemon) && pokemon.notes.length > 0"
+                  :notes="pokemon.notes"
+                  class="inline-block ml-2"
+                />
+              </div>
             </TableCell>
 
             <TableCell class="font-mono text-muted-foreground"> #{{ pokemon.id }} </TableCell>

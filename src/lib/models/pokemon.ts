@@ -34,6 +34,15 @@ export type PokemonEvolution = {
 
 export type PokemonCaughtEntry = Pokemon & { notes: string[]; timestamp: number };
 
+export function isPokemonCaughtEntry(
+  pokemon: Pokemon | PokemonCaughtEntry,
+): pokemon is PokemonCaughtEntry {
+  return (
+    (pokemon as PokemonCaughtEntry).timestamp !== undefined &&
+    (pokemon as PokemonCaughtEntry).notes !== undefined
+  );
+}
+
 export const POKEMON_TYPES = [
   'normal',
   'fighting',

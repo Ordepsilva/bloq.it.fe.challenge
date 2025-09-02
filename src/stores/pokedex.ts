@@ -32,6 +32,7 @@ export const usePokedexStore = defineStore(
       if (sortDir.value !== 'asc') count++;
       return count;
     });
+
     const queryClient = useQueryClient();
     function toggleCaught(pokemon: Pokemon) {
       if (caughtPokemons.value[pokemon.id]) {
@@ -61,6 +62,10 @@ export const usePokedexStore = defineStore(
 
     function setPage(page: number) {
       currentPage.value = page;
+    }
+
+    function getNotes(pokemonId: number): string[] {
+      return caughtPokemons.value[pokemonId]?.notes ?? [];
     }
 
     const filteredPokemons = computed(() => {
@@ -112,6 +117,7 @@ export const usePokedexStore = defineStore(
       itemsPerPage,
       totalPages,
       setPage,
+      getNotes,
     };
   },
   {
