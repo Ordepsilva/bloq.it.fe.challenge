@@ -13,12 +13,12 @@ import PokemonLoading from '@/components/pokemon-loading/PokemonLoading.vue';
 
 const { currentPage } = usePaginationQuery(1);
 const viewMode = ref<ViewModes>('table');
-const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
-
 const isMobile = useIsMobile();
 
 const { data: pokemons, error, isLoading, isError: isErrorPokemons } = useGetPokemons(currentPage);
 const { data: count, error: countError, isError: isErrorCount } = useGetPokemonsCount();
+
+const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
 
 watchEffect(() => {
   if (isErrorPokemons.value) {

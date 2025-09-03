@@ -1,45 +1,29 @@
 <script setup lang="ts">
 import { computed, ref, watch, watchEffect } from 'vue';
-import { usePaginationQuery } from '@/composables/usePaginationQuery';
 import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
 import PokemonCardGrid from '@/components/pokemon-card-grid/PokemonCardGrid.vue';
 import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination.vue';
 import PokemonTableFilters from '@/components/pokemon-filters/PokemonTableFilters.vue';
 import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
-import { useIsMobile } from '@/composables/useIsMobile';
 import { usePokedexStore } from '@/stores/pokedex';
 import { PER_PAGE } from '@/lib/constants';
 import type { ViewModes } from '@/lib/models/common';
-import { exportPokemonsToCsv } from '@/lib/models/pokemon';
 import { Progress } from '@/components/ui/progress';
 import { useGetPokemonsCount } from '@/lib/queries/pokemons';
-import { downloadCsv } from '@/lib/utils';
-import { DownloadIcon } from 'lucide-vue-next';
-import { useFiltersQuery } from '@/composables/useFiltersQuery';
 import { toast } from 'vue-sonner';
 import PokemonTableActions from '@/components/pokemon-table-actions/PokemonTableActions.vue';
-import { useMultiSelect } from '@/composables/useMultiSelect';
+import { useTableActions, useFiltersQuery, usePaginationQuery, useIsMobile } from '@/composables';
 
+const viewMode = ref<ViewModes>('table');
 const store = usePokedexStore();
-const { currentPage } = usePaginationQuery(1);
-
-watch(currentPage, (page) => {
-  store.setPage(page);
-});
-
 const isMobile = useIsMobile();
+const { currentPage } = usePaginationQuery(1);
 const { searchName, selectedType, sortBy, sortDir } = useFiltersQuery({
   searchName: '',
   selectedType: undefined,
   sortBy: 'id',
   sortDir: 'asc',
 });
-const viewMode = ref<ViewModes>('table');
-const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
-const { data: count, error, isError } = useGetPokemonsCount();
-const caughtCount = computed(() => Object.keys(store.caughtPokemons).length);
-const progressValue = computed(() => (count.value ? (caughtCount.value / count.value) * 100 : 0));
-const caughtPokemons = computed(() => Object.values(store.caughtPokemons));
 
 const {
   selectedIds,
@@ -48,7 +32,23 @@ const {
   handleMultiSelectToggle,
   handleSelectAll,
   handleDeleteSelected,
-} = useMultiSelect();
+  exportSelectedToCSV,
+  exportAllPokedexToCSV,
+  clearSelection,
+} = useTableActions();
+
+const { data: count, error, isError } = useGetPokemonsCount();
+
+const effectiveView = computed(() => (isMobile.value ? 'cards' : viewMode.value));
+const caughtCount = computed(() => Object.keys(store.caughtPokemons).length);
+const progressValue = computed(() => (count.value ? (caughtCount.value / count.value) * 100 : 0));
+const currentPagePokemonIds = computed(() => {
+  return store.paginatedPokemons.map((pokemon) => pokemon.id);
+});
+
+watch(currentPage, (page) => {
+  store.setPage(page);
+});
 
 watch(
   [searchName, selectedType, sortBy, sortDir],
@@ -71,11 +71,6 @@ watchEffect(() => {
 function handlePageUpdate(page: number) {
   currentPage.value = page;
 }
-
-function downloadPokedexCsv() {
-  const csv = exportPokemonsToCsv(caughtPokemons.value);
-  downloadCsv(csv, 'my_pokedex.csv');
-}
 </script>
 
 <template>
@@ -95,12 +90,6 @@ function downloadPokedexCsv() {
         </div>
       </div>
       <div class="flex md:items-center gap-2 items-end">
-        <div role="button" class="flex items-center gap-1 p-2" title="Download Pokédex CSV">
-          <DownloadIcon
-            class="size-5 text-gray-500 cursor-pointer hover:scale-110"
-            @click="downloadPokedexCsv"
-          />
-        </div>
         <ViewModeToggle v-if="!isMobile" v-model="viewMode" />
         <PokemonTableFilters
           v-if="store.filteredPokemons.length > 0 || store.activeFilterCount > 0"
@@ -113,7 +102,13 @@ function downloadPokedexCsv() {
           v-if="store.filteredPokemons.length > 0"
           :selectedIds="selectedIds"
           :selectionMode="selectionMode"
+          :totalCount="store.paginatedPokemons.length"
+          :pageIds="currentPagePokemonIds"
           @toggleMultiSelect="handleMultiSelectToggle"
+          @exportSelected="exportSelectedToCSV"
+          @exportAll="exportAllPokedexToCSV"
+          @selectAll="handleSelectAll(currentPagePokemonIds)"
+          @clearSelection="clearSelection"
           @deleteSelected="
             () => {
               handleDeleteSelected();
@@ -137,6 +132,11 @@ function downloadPokedexCsv() {
       v-else
       :pokemons="store.paginatedPokemons"
       :hasFiltersActive="store.activeFilterCount > 0"
+      :enableMultiSelect="selectionMode"
+      :selectedIds="selectedIds"
+      @update:selectionChange="toggleSelect"
+      @update:selectAll="handleSelectAll"
+      @update:multiSelectActive="handleMultiSelectToggle"
     />
 
     <PokemonPagination

@@ -6,18 +6,41 @@ import { getPokemonCardColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 import { computed } from 'vue';
 import PokeballButton from '../pokeball-button/PokeballButton.vue';
-import { usePokemonCaught } from '@/composables/usePokemonCaught';
+import { usePokemonCaught } from '@/composables';
 import PokemonNotesPreview from '../pokemon-notes-preview/PokemonNotesPreview.vue';
 
 const props = defineProps<{
   pokemon: Pokemon | PokemonCaughtEntry;
+  multiSelectActive?: boolean;
+  selected?: boolean;
 }>();
 
+const emit = defineEmits<{
+  (e: 'update:multiSelectActive', value: boolean): void;
+  (e: 'update:selectAll', ids: number[]): void;
+  (e: 'update:selectionChange', value: number): void;
+}>();
+
+let longPressTimer: ReturnType<typeof setTimeout>;
 const router = useRouter();
 
 const mainType = computed(() => {
   return props.pokemon.types[0] ?? 'normal';
 });
+
+function startLongPress(id: number) {
+  longPressTimer = setTimeout(() => {
+    emit('update:multiSelectActive', true);
+    toggleSelect(id);
+  }, 500);
+}
+function cancelLongPress() {
+  clearTimeout(longPressTimer);
+}
+
+function toggleSelect(id: number) {
+  emit('update:selectionChange', id);
+}
 
 const { isCaught, toggleCaught } = usePokemonCaught();
 </script>
@@ -25,8 +48,16 @@ const { isCaught, toggleCaught } = usePokemonCaught();
 <template>
   <Card
     class="group relative m-1 h-[14rem] w-[18rem] cursor-pointer select-none overflow-hidden border-none rounded-2xl hover:scale-110 transition-transform duration-200"
-    :class="getPokemonCardColor(mainType)"
-    @click="router.push(`/pokemon/${pokemon.id}`)"
+    :class="[
+      getPokemonCardColor(mainType),
+      multiSelectActive ? 'ring-2 ring-gray-400' : '',
+      selected ? 'ring-4 ring-red-500' : '',
+    ]"
+    @click.stop="
+      multiSelectActive ? toggleSelect(pokemon.id) : router.push(`/pokemon/${pokemon.id}`)
+    "
+    @touchstart="startLongPress(pokemon.id)"
+    @touchend="cancelLongPress"
   >
     <div
       class="absolute left-0 top-0 h-full w-full"
@@ -52,9 +83,12 @@ const { isCaught, toggleCaught } = usePokemonCaught();
           />
         </CardTitle>
       </div>
-      <div class="">
-        <PokeballButton :caught="isCaught(pokemon)" size="size-12" @click="toggleCaught(pokemon)" />
-      </div>
+
+      <PokeballButton
+        :caught="isCaught(pokemon)"
+        size="md:size-12 size-14"
+        @click="toggleCaught(pokemon)"
+      />
     </CardHeader>
 
     <CardContent class="flex justify-between items-center relative z-10">

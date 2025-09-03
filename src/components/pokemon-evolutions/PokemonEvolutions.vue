@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useIsMobile } from '@/composables/useIsMobile';
+import { useIsMobile } from '@/composables';
 import type { PokemonEvolution } from '@/lib/models/pokemon';
 import { MoveRight, MoveDown } from 'lucide-vue-next';
 
