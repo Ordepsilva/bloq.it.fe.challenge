@@ -14,16 +14,23 @@ import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.v
 import { usePokemonCaught } from '@/composables/usePokemonCaught';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { useOnlineStatus } from '@/composables/useOnlineStatus';
-import PokemonNotesPreview from '../pokemon-notes-preview/PokemonNotesPreview.vue';
+import PokemonNotesPreview from '@/components/pokemon-notes-preview/PokemonNotesPreview.vue';
+import { Checkbox } from '@/components/ui/checkbox';
 const props = defineProps<{
   pokemons: Pokemon[] | PokemonCaughtEntry[];
   hasFiltersActive?: boolean;
+  enableMultiSelect?: boolean;
+  selectedIds?: Set<number>;
 }>();
 
 const isOnline = useOnlineStatus();
-
-const { isCaught, toggleCaught } = usePokemonCaught();
 const router = useRouter();
+const { isCaught, toggleCaught } = usePokemonCaught();
+
+const emit = defineEmits<{
+  (e: 'update:selectionChange', value: number): void;
+  (e: 'update:selectAll', ids: number[]): void;
+}>();
 </script>
 
 <template>
@@ -31,6 +38,18 @@ const router = useRouter();
     <Table class="min-w-full bg-transparent">
       <TableHeader class="hover:bg-none">
         <TableRow class="border-b-[#e6e4db] bg-muted-foreground/10">
+          <TableHead v-if="enableMultiSelect">
+            <Checkbox
+              :model-value="pokemons.every((p) => props.selectedIds?.has(p.id))"
+              class="cursor-pointer"
+              @click.stop="
+                emit(
+                  'update:selectAll',
+                  pokemons.map((p) => p.id),
+                )
+              "
+            />
+          </TableHead>
           <TableHead class="w-[80px]">Image</TableHead>
           <TableHead class="w-12"></TableHead>
           <TableHead class="min-w-auto">Name</TableHead>
@@ -55,6 +74,14 @@ const router = useRouter();
             :class="`transition cursor-pointer  ${getPokemonCardHoverColor(pokemon.types[0])} bg-none border-b-[#e6e4db]`"
             @click="router.push(`/pokemon/${pokemon.id}`)"
           >
+            <TableCell v-if="enableMultiSelect">
+              <Checkbox
+                :key="pokemon.id"
+                :model-value="props.selectedIds?.has(pokemon.id)"
+                class="cursor-pointer"
+                @click.stop="emit('update:selectionChange', pokemon.id)"
+              />
+            </TableCell>
             <TableCell>
               <img
                 data-testid="pokemon-image"

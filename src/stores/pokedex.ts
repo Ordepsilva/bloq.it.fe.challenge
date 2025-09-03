@@ -47,6 +47,12 @@ export const usePokedexStore = defineStore(
       queryClient.setQueryData([QUERY_KEYS.pokemon, pokemon.id], { ...pokemon });
     }
 
+    function deletePokemons(ids: number[]) {
+      ids.forEach((id) => {
+        delete caughtPokemons.value[id];
+      });
+    }
+
     function addNote(id: number, note: string) {
       const entry = caughtPokemons.value[id];
       if (entry) entry.notes.push(note);
@@ -118,6 +124,7 @@ export const usePokedexStore = defineStore(
       totalPages,
       setPage,
       getNotes,
+      deletePokemons,
     };
   },
   {

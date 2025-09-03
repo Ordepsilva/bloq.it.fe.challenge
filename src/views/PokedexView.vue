@@ -17,11 +17,11 @@ import { downloadCsv } from '@/lib/utils';
 import { DownloadIcon } from 'lucide-vue-next';
 import { useFiltersQuery } from '@/composables/useFiltersQuery';
 import { toast } from 'vue-sonner';
+import PokemonTableActions from '@/components/pokemon-table-actions/PokemonTableActions.vue';
+import { useMultiSelect } from '@/composables/useMultiSelect';
 
 const store = usePokedexStore();
 const { currentPage } = usePaginationQuery(1);
-
-store.setPage(currentPage.value);
 
 watch(currentPage, (page) => {
   store.setPage(page);
@@ -40,6 +40,15 @@ const { data: count, error, isError } = useGetPokemonsCount();
 const caughtCount = computed(() => Object.keys(store.caughtPokemons).length);
 const progressValue = computed(() => (count.value ? (caughtCount.value / count.value) * 100 : 0));
 const caughtPokemons = computed(() => Object.values(store.caughtPokemons));
+
+const {
+  selectedIds,
+  selectionMode,
+  toggleSelect,
+  handleMultiSelectToggle,
+  handleSelectAll,
+  handleDeleteSelected,
+} = useMultiSelect();
 
 watch(
   [searchName, selectedType, sortBy, sortDir],
@@ -61,7 +70,6 @@ watchEffect(() => {
 
 function handlePageUpdate(page: number) {
   currentPage.value = page;
-  store.setPage(page);
 }
 
 function downloadPokedexCsv() {
@@ -101,6 +109,18 @@ function downloadPokedexCsv() {
           v-model:sortBy="sortBy"
           v-model:sortDir="sortDir"
         />
+        <PokemonTableActions
+          v-if="store.filteredPokemons.length > 0"
+          :selectedIds="selectedIds"
+          :selectionMode="selectionMode"
+          @toggleMultiSelect="handleMultiSelectToggle"
+          @deleteSelected="
+            () => {
+              handleDeleteSelected();
+              currentPage = 1;
+            }
+          "
+        />
       </div>
     </div>
 
@@ -108,6 +128,10 @@ function downloadPokedexCsv() {
       v-if="effectiveView === 'table'"
       :pokemons="store.paginatedPokemons"
       :hasFiltersActive="store.activeFilterCount > 0"
+      :enableMultiSelect="selectionMode"
+      :selectedIds="selectedIds"
+      @update:selectionChange="toggleSelect"
+      @update:selectAll="handleSelectAll"
     />
     <PokemonCardGrid
       v-else
