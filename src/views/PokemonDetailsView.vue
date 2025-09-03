@@ -7,7 +7,7 @@ import { getPokemonCardColor } from '@/lib/models/colors';
 import { useGetPokemon, useGetPokemonEvolutions } from '@/lib/queries/pokemons';
 import { useRoute } from 'vue-router';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
-import { usePokemonCaught } from '@/composables/usePokemonCaught';
+import { usePokemonCaught, useOnlineStatus } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { formatDate } from '@/lib/utils';
 import { Share2 } from 'lucide-vue-next';
@@ -17,7 +17,6 @@ import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/utils';
 import { toast } from 'vue-sonner';
 import { ArrowLeftIcon } from 'lucide-vue-next';
-import { useOnlineStatus } from '@/composables/useOnlineStatus';
 
 const route = useRoute();
 

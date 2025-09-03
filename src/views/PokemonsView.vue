@@ -3,12 +3,11 @@ import { computed, ref, watchEffect } from 'vue';
 import PokemonTable from '@/components/pokemon-table/PokemonTable.vue';
 import PokemonCardGrid from '@/components/pokemon-card-grid/PokemonCardGrid.vue';
 import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination.vue';
-import { useIsMobile } from '@/composables/useIsMobile';
+import { useIsMobile, usePaginationQuery } from '@/composables';
 import { useGetPokemons, useGetPokemonsCount } from '@/lib/queries/pokemons';
 import { PER_PAGE } from '@/lib/constants';
 import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
 import type { ViewModes } from '@/lib/models/common';
-import { usePaginationQuery } from '@/composables/usePaginationQuery';
 import { toast } from 'vue-sonner';
 import PokemonLoading from '@/components/pokemon-loading/PokemonLoading.vue';
 

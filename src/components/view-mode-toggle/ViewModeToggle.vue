@@ -28,14 +28,16 @@ const localValue = computed({
     <ToggleGroupItem
       :disabled="modelValue == 'table'"
       value="table"
-      class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
+      title="Table View"
+      class="p-2 rounded-md cursor-pointer hover:bg-gray-200"
     >
       <Table class="size-5" />
     </ToggleGroupItem>
     <ToggleGroupItem
       value="cards"
       :disabled="modelValue == 'cards'"
-      class="p-2 text-gray-500 rounded-md cursor-pointer hover:bg-gray-200"
+      title="Card View"
+      class="p-2 rounded-md cursor-pointer hover:bg-gray-200"
     >
       <LayoutGrid class="size-5" />
     </ToggleGroupItem>

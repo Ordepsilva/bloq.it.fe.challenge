@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIsMobile } from '@/composables/useIsMobile';
+import { useIsMobile } from '@/composables';
 import DesktopNav from './DesktopNav.vue';
 import MobileNav from './MobileNav.vue';
 const isMobile = useIsMobile();

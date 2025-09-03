@@ -11,9 +11,8 @@ import { isPokemonCaughtEntry, type Pokemon, type PokemonCaughtEntry } from '@/l
 import { useRouter } from 'vue-router';
 import { getPokemonCardHoverColor } from '@/lib/models/colors';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
-import { usePokemonCaught } from '@/composables/usePokemonCaught';
+import { usePokemonCaught, useOnlineStatus } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
-import { useOnlineStatus } from '@/composables/useOnlineStatus';
 import PokemonNotesPreview from '@/components/pokemon-notes-preview/PokemonNotesPreview.vue';
 import { Checkbox } from '@/components/ui/checkbox';
 const props = defineProps<{
