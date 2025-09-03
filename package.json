@@ -25,6 +25,7 @@
     "@unovis/ts": "^1.6.0",
     "@unovis/vue": "^1.6.0",
     "@vueuse/core": "^13.9.0",
+    "@vueuse/router": "^14.0.0-alpha.0",
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

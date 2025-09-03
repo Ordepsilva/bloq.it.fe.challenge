@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, type ComputedRef } from 'vue';
+import { computed, type ComputedRef } from 'vue';
 import { EllipsisVertical } from 'lucide-vue-next';
 import {
   DropdownMenu,

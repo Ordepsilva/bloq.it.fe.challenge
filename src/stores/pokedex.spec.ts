@@ -77,7 +77,7 @@ describe('usePokedexStore', () => {
     store.searchName = 'bulba';
     expect(store.filteredPokemons.length).toBe(1);
     store.searchName = '';
-    store.selectedType = null;
+    store.selectedType = undefined;
     expect(store.filteredPokemons.length).toBe(3);
   });
 

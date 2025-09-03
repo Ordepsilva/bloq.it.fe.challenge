@@ -14,9 +14,8 @@ export const usePokedexStore = defineStore(
 
     const currentPage = ref(1);
     const itemsPerPage = ref(PER_PAGE);
-
     const searchName = ref<string>('');
-    const selectedType = ref<PokemonType | null>(null);
+    const selectedType = ref<PokemonType | undefined>(undefined);
     const sortBy = ref<SortingColumns>('id');
     const sortDir = ref<SortingDirections>('asc');
 
@@ -27,7 +26,7 @@ export const usePokedexStore = defineStore(
     const activeFilterCount = computed(() => {
       let count = 0;
       if (searchName.value !== '') count++;
-      if (selectedType.value !== null) count++;
+      if (selectedType.value !== undefined) count++;
       if (sortBy.value !== 'id') count++;
       if (sortDir.value !== 'asc') count++;
       return count;

@@ -1,8 +1,6 @@
 import type { SortingColumns, SortingDirections } from '@/lib/models/common';
 import { POKEMON_TYPES, type PokemonType } from '@/lib/models/pokemon';
-import { getQueryValue } from '@/lib/utils';
-import { ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouteQuery } from '@vueuse/router';
 
 type FilterDefaults = {
   searchName?: string;
@@ -24,50 +22,16 @@ function isSortingDirection(value: unknown): value is SortingDirections {
 }
 
 export function useFiltersQuery(defaults: FilterDefaults = {}) {
-  const route = useRoute();
-  const router = useRouter();
-
-  const nameRaw = getQueryValue(route.query.name);
-  const searchName = ref(nameRaw ?? defaults.searchName ?? '');
-
-  const typeRaw = getQueryValue(route.query.type);
-  const selectedType = ref(isPokemonType(typeRaw) ? typeRaw : (defaults.selectedType ?? null));
-
-  const sortByRaw = getQueryValue(route.query.sortBy);
-  const sortBy = ref(isSortingColumn(sortByRaw) ? sortByRaw : (defaults.sortBy ?? 'id'));
-
-  const sortDirRaw = getQueryValue(route.query.sortDir);
-  const sortDir = ref(isSortingDirection(sortDirRaw) ? sortDirRaw : (defaults.sortDir ?? 'asc'));
-  watch([searchName, selectedType, sortBy, sortDir], ([name, type, by, dir]) => {
-    const newQuery = {
-      ...route.query,
-      name: name || undefined,
-      type: type || undefined,
-      sortBy: by,
-      sortDir: dir,
-    };
-
-    if (JSON.stringify(newQuery) !== JSON.stringify(route.query)) {
-      router.replace({ query: newQuery });
-    }
+  const searchName = useRouteQuery('name', defaults.searchName ?? '', { transform: String });
+  const selectedType = useRouteQuery('type', defaults.selectedType ?? '', {
+    transform: (v) => (isPokemonType(v) ? v : undefined),
   });
-
-  watch(
-    () => route.query,
-    (query) => {
-      const nameRaw = getQueryValue(query.name);
-      searchName.value = nameRaw ?? defaults.searchName ?? '';
-
-      const typeRaw = getQueryValue(query.type);
-      selectedType.value = isPokemonType(typeRaw) ? typeRaw : (defaults.selectedType ?? null);
-
-      const sortByRaw = getQueryValue(query.sortBy);
-      sortBy.value = isSortingColumn(sortByRaw) ? sortByRaw : (defaults.sortBy ?? 'id');
-
-      const sortDirRaw = getQueryValue(query.sortDir);
-      sortDir.value = isSortingDirection(sortDirRaw) ? sortDirRaw : (defaults.sortDir ?? 'asc');
-    },
-  );
+  const sortBy = useRouteQuery('sortBy', defaults.sortBy ?? 'id', {
+    transform: (v) => (isSortingColumn(v) ? v : 'id'),
+  });
+  const sortDir = useRouteQuery('sortDir', defaults.sortDir ?? 'asc', {
+    transform: (v) => (isSortingDirection(v) ? v : 'asc'),
+  });
 
   return { searchName, selectedType, sortBy, sortDir };
 }

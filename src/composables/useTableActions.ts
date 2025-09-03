@@ -11,7 +11,6 @@ export function useTableActions() {
 
   function toggleSelect(id: number) {
     const set = new Set(selectedIds.value);
-    console.log(id);
     if (!set.has(id)) {
       set.add(id);
     } else {

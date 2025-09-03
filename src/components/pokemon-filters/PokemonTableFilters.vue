@@ -12,14 +12,14 @@ import PokemonTypeBadge from '../pokemon-type-badge/PokemonTypeBadge.vue';
 
 const props = defineProps<{
   searchName: string;
-  selectedType: PokemonType | null;
+  selectedType: PokemonType | undefined;
   sortBy: SortingColumns;
   sortDir: SortingDirections;
 }>();
 
 const emit = defineEmits<{
   (e: 'update:searchName', value: string): void;
-  (e: 'update:selectedType', value: PokemonType | null): void;
+  (e: 'update:selectedType', value: PokemonType | undefined): void;
   (e: 'update:sortBy', value: SortingColumns): void;
   (e: 'update:sortDir', value: SortingDirections): void;
 }>();
@@ -67,16 +67,16 @@ function resetFilters() {
   sortKey.value = 'id';
   sortDir.value = 'asc';
   filterName.value = '';
-  filterType.value = null;
+  filterType.value = undefined;
   emit('update:sortBy', 'id');
   emit('update:sortDir', 'asc');
   emit('update:searchName', '');
-  emit('update:selectedType', null);
+  emit('update:selectedType', undefined);
 }
 
 function selectType(type: PokemonType) {
   if (filterType.value === type) {
-    filterType.value = null;
+    filterType.value = undefined;
     return;
   }
   filterType.value = type;

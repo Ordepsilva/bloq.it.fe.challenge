@@ -6,7 +6,6 @@ import PokemonPagination from '@/components/pokemon-pagination/PokemonPagination
 import PokemonTableFilters from '@/components/pokemon-filters/PokemonTableFilters.vue';
 import ViewModeToggle from '@/components/view-mode-toggle/ViewModeToggle.vue';
 import { usePokedexStore } from '@/stores/pokedex';
-import { PER_PAGE } from '@/lib/constants';
 import type { ViewModes } from '@/lib/models/common';
 import { Progress } from '@/components/ui/progress';
 import { useGetPokemonsCount } from '@/lib/queries/pokemons';
@@ -46,9 +45,14 @@ const currentPagePokemonIds = computed(() => {
   return store.paginatedPokemons.map((pokemon) => pokemon.id);
 });
 
-watch(currentPage, (page) => {
-  store.setPage(page);
-});
+watch(
+  currentPage,
+  (page) => {
+    store.setPage(page);
+    console.log(page);
+  },
+  { immediate: true },
+);
 
 watch(
   [searchName, selectedType, sortBy, sortDir],
@@ -140,9 +144,9 @@ function handlePageUpdate(page: number) {
     />
 
     <PokemonPagination
-      v-if="store.filteredPokemons.length > PER_PAGE"
+      v-if="store.filteredPokemons.length > store.itemsPerPage"
       class="mt-2"
-      :page="store.currentPage"
+      :page="currentPage"
       :perPage="store.itemsPerPage"
       :total="store.filteredPokemons.length"
       @update:page="handlePageUpdate"
