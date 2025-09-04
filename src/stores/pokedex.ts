@@ -11,7 +11,6 @@ export const usePokedexStore = defineStore(
   'pokedex',
   () => {
     const caughtPokemons = ref<Record<number, PokemonCaughtEntry>>({});
-
     const currentPage = ref(1);
     const itemsPerPage = ref(PER_PAGE);
     const searchName = ref<string>('');
@@ -87,10 +86,13 @@ export const usePokedexStore = defineStore(
       }
 
       result.sort((a, b) => {
+        const key = sortBy.value;
         const dir = sortDir.value === 'asc' ? 1 : -1;
-        if (a[sortBy.value] < b[sortBy.value]) return -1 * dir;
-        if (a[sortBy.value] > b[sortBy.value]) return 1 * dir;
-        return 0;
+        const aValue = a[key];
+        const bValue = b[key];
+
+        if (aValue === bValue) return 0;
+        return aValue < bValue ? -dir : dir;
       });
 
       return result;

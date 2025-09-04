@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getPokemonTypeColor } from '@/lib/models/colors';
-import type { SortingColumns, SortingDirections } from '@/lib/models/common';
-import { POKEMON_TYPES, type PokemonType } from '@/lib/models/pokemon';
+import { SORTING_COLUMNS, type SortingColumns, type SortingDirections } from '@/lib/models/common';
+import { POKEMON_TYPES, type PokemonFilters, type PokemonType } from '@/lib/models/pokemon';
 import { usePokedexStore } from '@/stores/pokedex';
 import { ref, computed } from 'vue';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -10,12 +10,7 @@ import { SlidersHorizontal } from 'lucide-vue-next';
 import { Input } from '@/components/ui/input';
 import PokemonTypeBadge from '../pokemon-type-badge/PokemonTypeBadge.vue';
 
-const props = defineProps<{
-  searchName: string;
-  selectedType: PokemonType | undefined;
-  sortBy: SortingColumns;
-  sortDir: SortingDirections;
-}>();
+const props = defineProps<PokemonFilters>();
 
 const emit = defineEmits<{
   (e: 'update:searchName', value: string): void;
@@ -25,6 +20,7 @@ const emit = defineEmits<{
 }>();
 
 const showFilters = ref(false);
+
 const sortKey = ref<SortingColumns>(props.sortBy);
 const sortDir = ref<SortingDirections>(props.sortDir);
 const filterName = ref(props.searchName);
@@ -38,23 +34,6 @@ const capitalizedTypes = computed(() =>
     color: getPokemonTypeColor(type),
   })),
 );
-
-const sortingColumns: { key: SortingColumns; label: string }[] = [
-  {
-    key: 'id',
-    label: 'ID',
-  },
-  {
-    key: 'name',
-    label: 'Name',
-  },
-  { key: 'height', label: 'Height' },
-  { key: 'weight', label: 'Weight' },
-  {
-    key: 'timestamp',
-    label: 'Date Caught',
-  },
-];
 
 function applyFilters() {
   emit('update:sortBy', sortKey.value);
@@ -110,7 +89,7 @@ function selectType(type: PokemonType) {
 
         <div class="flex gap-2 flex-wrap">
           <Button
-            v-for="sortColumn in sortingColumns"
+            v-for="sortColumn in SORTING_COLUMNS"
             :key="sortColumn.key"
             :data-testid="`sort-column-${sortColumn.label}`"
             size="sm"

@@ -1,13 +1,6 @@
 import type { SortingColumns, SortingDirections } from '@/lib/models/common';
-import { POKEMON_TYPES, type PokemonType } from '@/lib/models/pokemon';
+import { POKEMON_TYPES, type PokemonFilters, type PokemonType } from '@/lib/models/pokemon';
 import { useRouteQuery } from '@vueuse/router';
-
-type FilterDefaults = {
-  searchName?: string;
-  selectedType?: PokemonType;
-  sortBy?: SortingColumns;
-  sortDir?: SortingDirections;
-};
 
 function isPokemonType(value: unknown): value is PokemonType {
   return typeof value === 'string' && POKEMON_TYPES.includes(value as PokemonType);
@@ -21,7 +14,14 @@ function isSortingDirection(value: unknown): value is SortingDirections {
   return value === 'asc' || value === 'desc';
 }
 
-export function useFiltersQuery(defaults: FilterDefaults = {}) {
+export function useFiltersQuery(
+  defaults: PokemonFilters = {
+    searchName: '',
+    sortBy: 'id',
+    sortDir: 'asc',
+    selectedType: undefined,
+  },
+) {
   const searchName = useRouteQuery('name', defaults.searchName ?? '', { transform: String });
   const selectedType = useRouteQuery('type', defaults.selectedType ?? '', {
     transform: (v) => (isPokemonType(v) ? v : undefined),

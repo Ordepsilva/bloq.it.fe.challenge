@@ -17,12 +17,7 @@ const viewMode = ref<ViewModes>('table');
 const store = usePokedexStore();
 const isMobile = useIsMobile();
 const { currentPage } = usePaginationQuery(1);
-const { searchName, selectedType, sortBy, sortDir } = useFiltersQuery({
-  searchName: '',
-  selectedType: undefined,
-  sortBy: 'id',
-  sortDir: 'asc',
-});
+const { searchName, selectedType, sortBy, sortDir } = useFiltersQuery();
 
 const {
   selectedIds,

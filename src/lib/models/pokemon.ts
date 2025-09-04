@@ -1,5 +1,6 @@
 import { type Pokemon as APIPokemon, type PokemonType as APIPokemonType } from 'pokeapi-js-wrapper';
 import { formatDate } from '../utils';
+import type { SortingColumns, SortingDirections } from './common';
 
 export type Pokemon = {
   id: number;
@@ -30,6 +31,13 @@ export type PokemonEvolution = {
   id: number;
   name: string;
   imgUrl: string | null;
+};
+
+export type PokemonFilters = {
+  searchName: string;
+  selectedType?: PokemonType;
+  sortBy: SortingColumns;
+  sortDir: SortingDirections;
 };
 
 export type PokemonCaughtEntry = Pokemon & { notes: string[]; timestamp: number };
