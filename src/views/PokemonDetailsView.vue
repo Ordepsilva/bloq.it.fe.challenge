@@ -7,7 +7,7 @@ import { getPokemonCardColor } from '@/lib/models/colors';
 import { useGetPokemon, useGetPokemonEvolutions } from '@/lib/queries/pokemons';
 import { useRoute } from 'vue-router';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
-import { usePokemonCaught, useOnlineStatus } from '@/composables';
+import { usePokemonCaught, useOnlineStatus, useIsMobile } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { formatDate } from '@/lib/utils';
 import { Share2, Sparkle, ArrowLeftIcon } from 'lucide-vue-next';
@@ -26,6 +26,8 @@ const hovered = ref(false);
 const store = usePokedexStore();
 const { isCaught, toggleCaught } = usePokemonCaught();
 const isOnline = useOnlineStatus();
+const isMobile = useIsMobile();
+const showShiny = ref(false);
 const { data: pokemon, error, isLoading, isError } = useGetPokemon(id, isOnline.value);
 const {
   data: evolutions,
@@ -64,6 +66,11 @@ function sharePokemon() {
     text: `#${pokemon.value.id} ${pokemon.value.name}`,
     url: window.location.href,
   });
+}
+
+function toggleShiny() {
+  if (!pokemon.value) return;
+  showShiny.value = !showShiny.value;
 }
 </script>
 
@@ -104,17 +111,22 @@ function sharePokemon() {
           <div class="relative">
             <img
               :src="
-                hovered
+                hovered || showShiny
                   ? (pokemon.shinyImgUrl ?? pokemon.imgUrl ?? '/placeholder.png')
                   : (pokemon.imgUrl ?? '/placeholder.png')
               "
               :alt="pokemon.name"
               class="size-40 object-contain drop-shadow-lg transition-transform duration-300"
-              @mouseenter="hovered = true"
-              @mouseleave="hovered = false"
+              @mouseenter="!isMobile ? (hovered = true) : null"
+              @mouseleave="!isMobile ? (hovered = false) : null"
+              @click="isMobile ? toggleShiny() : null"
             />
 
-            <Sparkle v-if="hovered" class="absolute right-2 top-2 text-yellow-500" />
+            <Sparkle
+              v-if="hovered || isMobile"
+              class="absolute right-2 top-2 text-yellow-500"
+              @click="isMobile ? toggleShiny() : null"
+            />
           </div>
           <div class="flex flex-col gap-3 text-center md:text-left">
             <div class="flex items-center gap-2 justify-center md:justify-start">

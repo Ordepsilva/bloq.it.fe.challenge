@@ -70,8 +70,8 @@ const { isCaught, toggleCaught } = usePokemonCaught();
     @click.stop="
       multiSelectActive ? toggleSelect(pokemon.id) : router.push(`/pokemon/${pokemon.id}`)
     "
-    @mouseenter="flipped = true"
-    @mouseleave="flipped = false"
+    @mouseenter="!isMobile ? (flipped = true) : null"
+    @mouseleave="!isMobile ? (flipped = false) : null"
     @touchstart="startLongPress(pokemon.id)"
     @touchend="cancelLongPress"
   >
