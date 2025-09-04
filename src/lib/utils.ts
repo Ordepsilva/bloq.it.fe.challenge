@@ -8,11 +8,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getQueryValue(value: unknown): string | null {
-  if (Array.isArray(value)) return value[0] ?? null;
-  if (typeof value === 'string') return value;
-  return null;
-}
 export function formatDate(timestamp: number) {
   const date = new Date(timestamp);
   const day = String(date.getDate()).padStart(2, '0');
