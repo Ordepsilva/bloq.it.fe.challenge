@@ -112,7 +112,6 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
   const heightInMeters = height * 0.1;
   const weightInKilograms = weight * 0.1;
 
-  console.log(sprites.other['official-artwork']);
   return {
     id,
     name,

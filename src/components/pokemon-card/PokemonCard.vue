@@ -10,11 +10,12 @@ import {
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 import { computed, ref } from 'vue';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
-import { usePokemonCaught } from '@/composables';
+import { useIsMobile, usePokemonCaught } from '@/composables';
 import PokemonNotesPreview from '@/components/pokemon-notes-preview/PokemonNotesPreview.vue';
 import { Badge } from '@/components/ui/badge';
 import { STAT_BADGES_CONFIG } from '@/lib/constants';
-
+import { ArrowLeftRight } from 'lucide-vue-next';
+import Button from '../ui/button/Button.vue';
 const props = defineProps<{
   pokemon: Pokemon | PokemonCaughtEntry;
   multiSelectActive?: boolean;
@@ -32,7 +33,7 @@ const flipped = ref(false);
 let longPressTimer: ReturnType<typeof setTimeout>;
 
 const router = useRouter();
-
+const isMobile = useIsMobile();
 const mainType = computed(() => {
   return props.pokemon.types[0] ?? 'normal';
 });
@@ -49,6 +50,10 @@ function cancelLongPress() {
 
 function toggleSelect(id: number) {
   emit('update:selectionChange', id);
+}
+
+function toggleFlip() {
+  flipped.value = !flipped.value;
 }
 
 const { isCaught, toggleCaught } = usePokemonCaught();
@@ -95,11 +100,16 @@ const { isCaught, toggleCaught } = usePokemonCaught();
         </CardTitle>
       </div>
 
-      <PokeballButton
-        :caught="isCaught(pokemon)"
-        size="md:size-12 size-14"
-        @click="toggleCaught(pokemon)"
-      />
+      <div class="flex gap-2 items-center">
+        <PokeballButton
+          :caught="isCaught(pokemon)"
+          size="md:size-12 size-14"
+          @click="toggleCaught(pokemon)"
+        />
+        <Button variant="ghost" size="icon" v-if="isMobile" @click.stop="toggleFlip()">
+          <ArrowLeftRight class="size-6" :class="flipped ? 'text-red-500' : 'text-white'" />
+        </Button>
+      </div>
     </CardHeader>
 
     <CardContent class="flex justify-between items-center relative z-10">
