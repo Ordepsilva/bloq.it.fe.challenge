@@ -49,7 +49,6 @@ watch(
   currentPage,
   (page) => {
     store.setPage(page);
-    console.log(page);
   },
   { immediate: true },
 );

@@ -12,7 +12,7 @@ describe('PokemonTableFilters', () => {
       attachTo: document.body,
       props: {
         searchName: '',
-        selectedType: null,
+        selectedType: undefined,
         sortBy: 'id',
         sortDir: 'asc',
       },
@@ -28,7 +28,7 @@ describe('PokemonTableFilters', () => {
 
   it('emits v-model updates for search, type, sort, and direction', async () => {
     const wrapper = mount(PokemonTableFilters, {
-      props: { searchName: '', selectedType: null, sortBy: 'id', sortDir: 'asc' },
+      props: { searchName: '', selectedType: undefined, sortBy: 'id', sortDir: 'asc' },
       attachTo: document.body,
     });
     // Open popover

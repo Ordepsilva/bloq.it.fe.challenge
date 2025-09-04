@@ -15,6 +15,7 @@ import { usePokemonCaught, useOnlineStatus } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import PokemonNotesPreview from '@/components/pokemon-notes-preview/PokemonNotesPreview.vue';
 import { Checkbox } from '@/components/ui/checkbox';
+
 const props = defineProps<{
   pokemons: Pokemon[] | PokemonCaughtEntry[];
   hasFiltersActive?: boolean;

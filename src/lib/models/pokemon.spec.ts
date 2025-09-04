@@ -48,8 +48,8 @@ describe('mapPokemon', () => {
       name: 'bulbasaur',
       imgUrl: 'img-url',
       types: ['grass', 'poison'],
-      height: 7,
-      weight: 69,
+      height: 0.7,
+      weight: 6.9,
       base_experience: 64,
       stats: {
         hp: 45,
