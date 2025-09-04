@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import PokemonLoading from '@/components/pokemon-loading/PokemonLoading.vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePokedexStore } from '@/stores/pokedex';
@@ -10,18 +10,19 @@ import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.v
 import { usePokemonCaught, useOnlineStatus } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { formatDate } from '@/lib/utils';
-import { Share2 } from 'lucide-vue-next';
+import { Share2, Sparkle, ArrowLeftIcon } from 'lucide-vue-next';
 import PokemonStatsRadar from '@/components/pokemon-stats-radar/PokemonStatsRadar.vue';
 import PokemonEvolutions from '@/components/pokemon-evolutions/PokemonEvolutions.vue';
 import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/utils';
 import { toast } from 'vue-sonner';
-import { ArrowLeftIcon } from 'lucide-vue-next';
 
 const route = useRoute();
 
 const rawId = route.params.id;
 const id = Number(Array.isArray(rawId) ? rawId[0] : rawId);
+
+const hovered = ref(false);
 const store = usePokedexStore();
 const { isCaught, toggleCaught } = usePokemonCaught();
 const isOnline = useOnlineStatus();
@@ -100,11 +101,21 @@ function sharePokemon() {
         </div>
 
         <CardHeader class="flex flex-col md:flex-row items-center gap-6 py-6">
-          <img
-            :src="pokemon.imgUrl ?? '/placeholder.png'"
-            :alt="pokemon.name"
-            class="size-40 object-contain drop-shadow-lg transition-transform duration-300"
-          />
+          <div class="relative">
+            <img
+              :src="
+                hovered
+                  ? (pokemon.shinyImgUrl ?? pokemon.imgUrl ?? '/placeholder.png')
+                  : (pokemon.imgUrl ?? '/placeholder.png')
+              "
+              :alt="pokemon.name"
+              class="size-40 object-contain drop-shadow-lg transition-transform duration-300"
+              @mouseenter="hovered = true"
+              @mouseleave="hovered = false"
+            />
+
+            <Sparkle v-if="hovered" class="absolute right-2 top-2 text-yellow-500" />
+          </div>
           <div class="flex flex-col gap-3 text-center md:text-left">
             <div class="flex items-center gap-2 justify-center md:justify-start">
               <CardTitle class="text-4xl font-pokemon font-bold tracking-wide drop-shadow">

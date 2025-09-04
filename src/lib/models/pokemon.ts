@@ -6,6 +6,7 @@ export type Pokemon = {
   id: number;
   name: string;
   imgUrl: string | null;
+  shinyImgUrl: string | null;
   types: PokemonType[];
   height: number;
   weight: number;
@@ -111,6 +112,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
   const heightInMeters = height * 0.1;
   const weightInKilograms = weight * 0.1;
 
+  console.log(sprites.other['official-artwork']);
   return {
     id,
     name,
@@ -118,6 +120,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     weight: parseFloat(weightInKilograms.toFixed(2)),
     base_experience: base_experience ?? 0,
     imgUrl: sprites.other['official-artwork'].front_default ?? null,
+    shinyImgUrl: sprites.other['official-artwork'].front_shiny ?? null,
     types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),
     stats: mappedStats,
   };

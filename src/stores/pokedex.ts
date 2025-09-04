@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref, computed, watch } from 'vue';
-import type { Pokemon, PokemonCaughtEntry, PokemonType } from '@/lib/models/pokemon';
-import type { SortingColumns, SortingDirections } from '@/lib/models/common';
+import type {
+  SortingColumns,
+  SortingDirections,
+  Pokemon,
+  PokemonCaughtEntry,
+  PokemonType,
+} from '@/lib/models';
 import { PER_PAGE } from '@/lib/constants';
 import 'pinia-plugin-persistedstate';
 import { useQueryClient } from '@tanstack/vue-query';

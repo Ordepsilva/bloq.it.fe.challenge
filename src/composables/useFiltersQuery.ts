@@ -1,5 +1,10 @@
-import type { SortingColumns, SortingDirections } from '@/lib/models/common';
-import { POKEMON_TYPES, type PokemonFilters, type PokemonType } from '@/lib/models/pokemon';
+import {
+  POKEMON_TYPES,
+  type PokemonFilters,
+  type PokemonType,
+  type SortingColumns,
+  type SortingDirections,
+} from '@/lib/models';
 import { useRouteQuery } from '@vueuse/router';
 
 function isPokemonType(value: unknown): value is PokemonType {

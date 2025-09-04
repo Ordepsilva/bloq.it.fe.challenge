@@ -7,8 +7,8 @@ import {
   getPokemonTypeGradient,
   getPokemonCardColor,
   getPokemonCardHoverColor,
-} from '@/lib/models/colors';
-import { POKEMON_TYPES } from '@/lib/models/pokemon';
+  POKEMON_TYPES,
+} from '@/lib/models';
 import { describe, expect, it } from 'vitest';
 
 describe('Pokemon colors mapping', () => {

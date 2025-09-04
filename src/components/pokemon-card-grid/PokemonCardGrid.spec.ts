@@ -24,6 +24,7 @@ const samplePokemons = [
     id: 1,
     name: 'Bulbasaur',
     imgUrl: '',
+    shinyImgUrl: '',
     types: ['grass'],
     height: 7,
     weight: 69,

@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { getPokemonTypeColor } from '@/lib/models/colors';
-import { SORTING_COLUMNS, type SortingColumns, type SortingDirections } from '@/lib/models/common';
-import { POKEMON_TYPES, type PokemonFilters, type PokemonType } from '@/lib/models/pokemon';
+import {
+  SORTING_COLUMNS,
+  type SortingColumns,
+  type SortingDirections,
+  getPokemonTypeColor,
+  POKEMON_TYPES,
+  type PokemonFilters,
+  type PokemonType,
+} from '@/lib/models';
 import { usePokedexStore } from '@/stores/pokedex';
 import { ref, computed } from 'vue';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { SlidersHorizontal } from 'lucide-vue-next';
 import { Input } from '@/components/ui/input';
-import PokemonTypeBadge from '../pokemon-type-badge/PokemonTypeBadge.vue';
+import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 
 const props = defineProps<PokemonFilters>();
 

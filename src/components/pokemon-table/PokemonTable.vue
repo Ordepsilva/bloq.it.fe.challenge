@@ -7,9 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { isPokemonCaughtEntry, type Pokemon, type PokemonCaughtEntry } from '@/lib/models/pokemon';
+import {
+  isPokemonCaughtEntry,
+  type Pokemon,
+  type PokemonCaughtEntry,
+  getPokemonCardHoverColor,
+} from '@/lib/models';
 import { useRouter } from 'vue-router';
-import { getPokemonCardHoverColor } from '@/lib/models/colors';
+
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
 import { usePokemonCaught, useOnlineStatus } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';

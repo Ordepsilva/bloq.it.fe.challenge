@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { isPokemonCaughtEntry, type Pokemon, type PokemonCaughtEntry } from '@/lib/models/pokemon';
-import { getPokemonCardColor } from '@/lib/models/colors';
+import {
+  isPokemonCaughtEntry,
+  type Pokemon,
+  type PokemonCaughtEntry,
+  getPokemonCardColor,
+} from '@/lib/models';
 import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.vue';
-import { computed } from 'vue';
-import PokeballButton from '../pokeball-button/PokeballButton.vue';
+import { computed, ref } from 'vue';
+import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { usePokemonCaught } from '@/composables';
-import PokemonNotesPreview from '../pokemon-notes-preview/PokemonNotesPreview.vue';
+import PokemonNotesPreview from '@/components/pokemon-notes-preview/PokemonNotesPreview.vue';
+import { Badge } from '@/components/ui/badge';
+import { STAT_BADGES_CONFIG } from '@/lib/constants';
 
 const props = defineProps<{
   pokemon: Pokemon | PokemonCaughtEntry;
@@ -21,7 +27,10 @@ const emit = defineEmits<{
   (e: 'update:selectionChange', value: number): void;
 }>();
 
+const flipped = ref(false);
+
 let longPressTimer: ReturnType<typeof setTimeout>;
+
 const router = useRouter();
 
 const mainType = computed(() => {
@@ -56,6 +65,8 @@ const { isCaught, toggleCaught } = usePokemonCaught();
     @click.stop="
       multiSelectActive ? toggleSelect(pokemon.id) : router.push(`/pokemon/${pokemon.id}`)
     "
+    @mouseenter="flipped = true"
+    @mouseleave="flipped = false"
     @touchstart="startLongPress(pokemon.id)"
     @touchend="cancelLongPress"
   >
@@ -93,14 +104,35 @@ const { isCaught, toggleCaught } = usePokemonCaught();
 
     <CardContent class="flex justify-between items-center relative z-10">
       <img
-        :src="pokemon.imgUrl ?? '/placeholder.png'"
+        :src="
+          flipped
+            ? (pokemon.shinyImgUrl ?? '/placeholder.png')
+            : (pokemon.imgUrl ?? '/placeholder.png')
+        "
         alt="pokemon"
         data-testid="pokemon-image"
         class="size-30 transition-transform duration-200 group-hover:scale-110"
       />
-      <div class="flex flex-col gap-2">
-        <PokemonTypeBadge v-for="type in pokemon.types" :key="type" :type="type" />
-      </div>
+
+      <template v-if="!flipped">
+        <div class="flex flex-col gap-2">
+          <PokemonTypeBadge v-for="type in pokemon.types" :key="type" :type="type" />
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="flex flex-wrap gap-1 justify-end flex-1">
+          <Badge
+            v-for="badge in STAT_BADGES_CONFIG"
+            :key="badge.key"
+            :title="`${badge.label}: ${pokemon.stats[badge.key]}`"
+            class="text-xs flex items-center font-mono w-14"
+            :class="[badge.bg, badge.text]"
+          >
+            {{ badge.icon }} {{ pokemon.stats[badge.key] }}
+          </Badge>
+        </div>
+      </template>
     </CardContent>
   </Card>
 </template>

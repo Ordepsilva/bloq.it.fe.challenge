@@ -1,9 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import PokemonCard from './PokemonCard.vue';
-import { getPokemonCardColor } from '@/lib/models/colors';
+import { getPokemonCardColor, type Pokemon, type PokemonCaughtEntry } from '@/lib/models';
 import { createPinia, setActivePinia } from 'pinia';
-import type { Pokemon, PokemonCaughtEntry } from '@/lib/models/pokemon';
 
 vi.mock('@tanstack/vue-query', async (importOriginal) => {
   const actual = await importOriginal();
