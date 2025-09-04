@@ -95,6 +95,7 @@ describe('usePokedexStore', () => {
     const store = usePokedexStore();
     expect(() => store.addNote(999, 'Ghost note')).not.toThrow();
     expect(() => store.removeNote(999, 0)).not.toThrow();
+    expect(store.getNotes(999)).toEqual([]);
   });
 
   it('adds and removes notes', () => {
@@ -102,6 +103,7 @@ describe('usePokedexStore', () => {
     store.caughtPokemons = mockPokemons;
     store.addNote(1, 'Test note');
     expect(store.caughtPokemons[1].notes).toContain('Test note');
+    expect(store.getNotes(1)).toEqual(['Test note']);
     store.removeNote(1, 0);
     expect(store.caughtPokemons[1].notes).not.toContain('Test note');
   });

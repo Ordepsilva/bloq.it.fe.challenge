@@ -5,8 +5,10 @@ import {
   exportPokemonsToCsv,
   POKEMON_TYPES,
   type PokemonCaughtEntry,
+  isPokemonCaughtEntry,
+  type Pokemon,
 } from './pokemon';
-import type { Pokemon } from 'pokeapi-js-wrapper';
+import type { Pokemon as APIPokemon } from 'pokeapi-js-wrapper';
 
 const mockApiPokemon = {
   id: 1,
@@ -27,7 +29,31 @@ const mockApiPokemon = {
     { stat: { name: 'special-defense' }, base_stat: 65 },
     { stat: { name: 'speed' }, base_stat: 45 },
   ],
+} as APIPokemon;
+
+const mockRegularPokemon = {
+  id: 1,
+  name: 'bulbasaur',
+  imgUrl: 'img-url',
+  types: ['grass', 'poison'],
+  height: 7,
+  weight: 69,
+  base_experience: 64,
+  stats: {
+    hp: 45,
+    attack: 49,
+    defense: 49,
+    specialAttack: 65,
+    specialDefense: 65,
+    speed: 45,
+  },
 } as Pokemon;
+
+const mockCaughtEntry = {
+  ...mockRegularPokemon,
+  notes: ['First catch', 'Starter'],
+  timestamp: 1693382400000,
+} as PokemonCaughtEntry;
 
 describe('isPokemonType', () => {
   it('returns true for valid types', () => {
@@ -40,9 +66,19 @@ describe('isPokemonType', () => {
   });
 });
 
+describe('isPokemonCaughtEntry', () => {
+  it('should return true for valid PokemonCaughtEntry', () => {
+    expect(isPokemonCaughtEntry(mockCaughtEntry)).toBe(true);
+  });
+
+  it('should return false for regular Pokemon', () => {
+    expect(isPokemonCaughtEntry(mockRegularPokemon)).toBe(false);
+  });
+});
+
 describe('mapPokemon', () => {
   it('maps API pokemon to internal Pokemon type', () => {
-    const result = mapPokemon(mockApiPokemon as Pokemon);
+    const result = mapPokemon(mockApiPokemon as APIPokemon);
     expect(result).toMatchObject({
       id: 1,
       name: 'bulbasaur',
@@ -65,26 +101,7 @@ describe('mapPokemon', () => {
 
 describe('exportPokemonsToCsv', () => {
   it('exports caught pokemons to CSV', () => {
-    const entry: PokemonCaughtEntry = {
-      id: 1,
-      name: 'bulbasaur',
-      imgUrl: 'img-url',
-      types: ['grass', 'poison'],
-      height: 7,
-      weight: 69,
-      base_experience: 64,
-      stats: {
-        hp: 45,
-        attack: 49,
-        defense: 49,
-        specialAttack: 65,
-        specialDefense: 65,
-        speed: 45,
-      },
-      notes: ['First catch', 'Starter'],
-      timestamp: 1693382400000, // Example timestamp
-    };
-    const csv = exportPokemonsToCsv([entry]);
+    const csv = exportPokemonsToCsv([mockCaughtEntry]);
     expect(csv).toContain('bulbasaur');
     expect(csv).toContain('First catch | Starter');
     expect(csv.split('\n').length).toBe(2); // header + 1 row
