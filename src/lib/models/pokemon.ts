@@ -12,6 +12,7 @@ export type Pokemon = {
   weight: number;
   stats: PokemonStats;
   base_experience: number;
+  cries: PokemonCries;
 };
 
 export type PokemonStats = {
@@ -39,6 +40,11 @@ export type PokemonFilters = {
   selectedType?: PokemonType;
   sortBy: SortingColumns;
   sortDir: SortingDirections;
+};
+
+export type PokemonCries = {
+  latest: string;
+  legacy: string;
 };
 
 export type PokemonCaughtEntry = Pokemon & { notes: string[]; timestamp: number };
@@ -90,8 +96,25 @@ const STAT_NAME_MAP: Record<string, keyof PokemonStats> = {
   speed: 'speed',
 };
 
+function isCries(value: unknown): value is PokemonCries {
+  const cries = value as PokemonCries;
+  return typeof cries.latest === 'string' && typeof cries.legacy === 'string';
+}
+
 export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
-  const { id, name, height, weight, sprites, types, stats, base_experience } = apiPokemon;
+  const {
+    id,
+    name,
+    height,
+    weight,
+    sprites,
+    types,
+    stats,
+    base_experience,
+    cries: apiCries,
+  } = apiPokemon;
+
+  const cries = isCries(apiCries) ? apiCries : { latest: '', legacy: '' };
 
   const mappedStats: PokemonStats = {
     hp: 0,
@@ -118,6 +141,7 @@ export function mapPokemon(apiPokemon: APIPokemon): Pokemon {
     height: parseFloat(heightInMeters.toFixed(2)),
     weight: parseFloat(weightInKilograms.toFixed(2)),
     base_experience: base_experience ?? 0,
+    cries,
     imgUrl: sprites.other['official-artwork'].front_default ?? null,
     shinyImgUrl: sprites.other['official-artwork'].front_shiny ?? null,
     types: types.map((t: APIPokemonType) => (isPokemonType(t.type.name) ? t.type.name : 'unknown')),

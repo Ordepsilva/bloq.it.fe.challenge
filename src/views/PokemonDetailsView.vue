@@ -10,12 +10,13 @@ import PokemonTypeBadge from '@/components/pokemon-type-badge/PokemonTypeBadge.v
 import { usePokemonCaught, useOnlineStatus, useIsMobile } from '@/composables';
 import PokeballButton from '@/components/pokeball-button/PokeballButton.vue';
 import { formatDate } from '@/lib/utils';
-import { Share2, Sparkle, ArrowLeftIcon } from 'lucide-vue-next';
+import { Share2, Sparkle, ArrowLeftIcon, Volume2 } from 'lucide-vue-next';
 import PokemonStatsRadar from '@/components/pokemon-stats-radar/PokemonStatsRadar.vue';
 import PokemonEvolutions from '@/components/pokemon-evolutions/PokemonEvolutions.vue';
 import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/utils';
 import { toast } from 'vue-sonner';
+import Button from '@/components/ui/button/Button.vue';
 
 const route = useRoute();
 
@@ -28,6 +29,8 @@ const { isCaught, toggleCaught } = usePokemonCaught();
 const isOnline = useOnlineStatus();
 const isMobile = useIsMobile();
 const showShiny = ref(false);
+const audioRef = ref<HTMLAudioElement | null>(null);
+
 const { data: pokemon, error, isLoading, isError } = useGetPokemon(id, isOnline.value);
 const {
   data: evolutions,
@@ -71,6 +74,10 @@ function sharePokemon() {
 function toggleShiny() {
   if (!pokemon.value) return;
   showShiny.value = !showShiny.value;
+}
+
+function playCry() {
+  audioRef.value?.play();
 }
 </script>
 
@@ -133,6 +140,17 @@ function toggleShiny() {
               <CardTitle class="text-4xl font-pokemon font-bold tracking-wide drop-shadow">
                 #{{ pokemon.id }} {{ pokemon.name[0].toUpperCase() + pokemon.name.slice(1) }}
               </CardTitle>
+
+              <Button
+                v-if="pokemon.cries.latest"
+                variant="ghost"
+                @click="playCry"
+                size="icon"
+                title="Play Cry"
+              >
+                <Volume2 class="size-6" />
+              </Button>
+              <audio ref="audioRef" :src="pokemon.cries.latest"></audio>
             </div>
             <span v-if="caughtPokemon?.timestamp" class="text-xs text-gray-500">
               Caught on: {{ formatDate(caughtPokemon?.timestamp) }}
