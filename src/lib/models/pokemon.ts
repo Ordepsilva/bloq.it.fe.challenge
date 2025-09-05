@@ -96,7 +96,7 @@ const STAT_NAME_MAP: Record<string, keyof PokemonStats> = {
   speed: 'speed',
 };
 
-function isCries(value: unknown): value is PokemonCries {
+export function isCries(value: unknown): value is PokemonCries {
   const cries = value as PokemonCries;
   return typeof cries.latest === 'string' && typeof cries.legacy === 'string';
 }

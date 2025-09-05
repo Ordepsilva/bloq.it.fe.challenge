@@ -7,6 +7,7 @@ import {
   type PokemonCaughtEntry,
   isPokemonCaughtEntry,
   type Pokemon,
+  isCries,
 } from './pokemon';
 import type { Pokemon as APIPokemon } from 'pokeapi-js-wrapper';
 
@@ -29,13 +30,15 @@ const mockApiPokemon = {
     { stat: { name: 'special-defense' }, base_stat: 65 },
     { stat: { name: 'speed' }, base_stat: 45 },
   ],
-} as APIPokemon;
+  cries: { latest: 'cry-url', legacy: 'legacy-cry-url' },
+} as unknown as APIPokemon;
 
 const mockRegularPokemon = {
   id: 1,
   name: 'bulbasaur',
   imgUrl: 'img-url',
   types: ['grass', 'poison'],
+  cries: { latest: 'cry-url', legacy: 'legacy-cry-url' },
   height: 7,
   weight: 69,
   base_experience: 64,
@@ -76,6 +79,17 @@ describe('isPokemonCaughtEntry', () => {
   });
 });
 
+describe('isCries', () => {
+  it('should return true for valid cries', () => {
+    expect(isCries(mockCaughtEntry.cries)).toBe(true);
+  });
+
+  it('should return false for invalid cries', () => {
+    expect(isCries({ latest: 'invalid-url' })).toBe(false);
+    expect(isCries({})).toBe(false);
+  });
+});
+
 describe('mapPokemon', () => {
   it('maps API pokemon to internal Pokemon type', () => {
     const result = mapPokemon(mockApiPokemon as APIPokemon);
@@ -95,6 +109,7 @@ describe('mapPokemon', () => {
         specialDefense: 65,
         speed: 45,
       },
+      cries: { latest: 'cry-url', legacy: 'legacy-cry-url' },
     });
   });
 });
