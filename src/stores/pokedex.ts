@@ -27,6 +27,21 @@ export const usePokedexStore = defineStore(
       currentPage.value = 1;
     });
 
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'pokedex') {
+          const stored = localStorage.getItem('pokedex');
+          console.log('Storage event detected, updating caughtPokemons from localStorage');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (JSON.stringify(parsed.caughtPokemons) !== JSON.stringify(caughtPokemons.value)) {
+              caughtPokemons.value = parsed.caughtPokemons;
+            }
+          }
+        }
+      });
+    }
+
     const activeFilterCount = computed(() => {
       let count = 0;
       if (searchName.value !== '') count++;
