@@ -37,9 +37,9 @@ An advanced Pokédex web app built with Vue 3, Vite, Pinia, TanStack Query, Tail
 
 ## Getting Started
 
-### Recommended IDE Setup
+### Prerequisites
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+- [Node.js](https://nodejs.org/) (v18 or higher) must be installed on your system.
 
 ### Project Setup
 
@@ -68,15 +68,24 @@ npm run preview
   npm run test:unit
   ```
 
-### Linting, Formatting & Coverage
+### Linting, Formatting 
 
 ```sh
 npm run lint
 npm run format
-npm run coverage
 ```
 
-Code coverage is powered by [Istanbul](https://istanbul.js.org/) via Vitest. Run `npm run coverage` to generate a coverage report.
+
+### Vitest UI
+
+You can run the interactive Vitest UI for test exploration and debugging:
+
+```sh
+npm run test:ui
+```
+
+Code coverage is powered by [coverage-v8](https://vitest.dev/guide/coverage.html#v8) via Vitest and can be checked interactively in the Vitest UI. 
+
 
 ## Folder Structure
 
