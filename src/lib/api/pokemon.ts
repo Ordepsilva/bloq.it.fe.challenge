@@ -2,7 +2,7 @@ import { mapPokemon, type Pokemon, type PokemonEvolution } from '@/lib/models/po
 import { Pokedex, type Chain } from 'pokeapi-js-wrapper';
 import { PER_PAGE } from '../constants';
 
-const p = new Pokedex({ cache: true, cacheImages: true });
+const p = new Pokedex();
 
 export async function getPokemons(limit = PER_PAGE, offset = 0): Promise<Pokemon[]> {
   const response = await p.getPokemonsList({ limit, offset });
