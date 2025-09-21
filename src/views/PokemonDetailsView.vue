@@ -17,6 +17,7 @@ import PokemonNotes from '@/components/pokemon-notes/PokemonNotes.vue';
 import { share } from '@/lib/utils';
 import { toast } from 'vue-sonner';
 import Button from '@/components/ui/button/Button.vue';
+import { PokemonTypes } from '@/lib/models';
 
 const route = useRoute();
 
@@ -39,7 +40,9 @@ const {
 } = useGetPokemonEvolutions(id);
 
 const caughtPokemon = computed(() => store.caughtPokemons[id]);
-const typeColor = computed(() => getPokemonCardColor(pokemon.value?.types[0] ?? ''));
+const typeColor = computed(() =>
+  getPokemonCardColor(pokemon.value?.types[0] || PokemonTypes.normal),
+);
 watchEffect(() => {
   if (isError.value) {
     toast.error('Error fetching pokemons');

@@ -86,6 +86,9 @@ export type PokemonType = (typeof POKEMON_TYPES)[number];
 export function isPokemonType(value: string): value is PokemonType {
   return POKEMON_TYPES.includes(value as PokemonType);
 }
+export const PokemonTypes: { [K in PokemonType]: K } = Object.fromEntries(
+  POKEMON_TYPES.map((t) => [t, t]),
+) as { [K in PokemonType]: K };
 
 const STAT_NAME_MAP: Record<string, keyof PokemonStats> = {
   hp: 'hp',

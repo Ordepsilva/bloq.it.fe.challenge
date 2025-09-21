@@ -92,22 +92,18 @@ export const POKEMON_TYPE_GRADIENTS: Record<PokemonType, string> = {
   shadow: 'from-gray-400 to-gray-600',
 };
 
-export const getPokemonTypeColor = (type: string): string => {
-  const normalizedType = type.toLowerCase() as PokemonType;
-  return POKEMON_TYPE_COLORS[normalizedType] || POKEMON_TYPE_COLORS.normal;
+export const getPokemonTypeColor = (type: PokemonType): string => {
+  return POKEMON_TYPE_COLORS[type];
 };
 
-export const getPokemonTypeGradient = (type: string): string => {
-  const normalizedType = type.toLowerCase() as PokemonType;
-  return POKEMON_TYPE_GRADIENTS[normalizedType] || POKEMON_TYPE_GRADIENTS.normal;
+export const getPokemonTypeGradient = (type: PokemonType): string => {
+  return POKEMON_TYPE_GRADIENTS[type];
 };
 
-export const getPokemonCardColor = (type: string): string => {
-  const normalizedType = type.toLowerCase() as PokemonType;
-  return POKEMON_CARD_COLORS[normalizedType] || POKEMON_CARD_COLORS.normal;
+export const getPokemonCardColor = (type: PokemonType): string => {
+  return POKEMON_CARD_COLORS[type];
 };
 
-export const getPokemonCardHoverColor = (type: string): string => {
-  const normalizedType = type.toLowerCase() as PokemonType;
-  return POKEMON_CARD_HOVER_COLORS[normalizedType] || POKEMON_CARD_HOVER_COLORS.normal;
+export const getPokemonCardHoverColor = (type: PokemonType): string => {
+  return POKEMON_CARD_HOVER_COLORS[type];
 };

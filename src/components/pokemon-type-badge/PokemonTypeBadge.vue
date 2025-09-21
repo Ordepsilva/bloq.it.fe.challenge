@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge';
+import type { PokemonType } from '@/lib/models';
 import { getPokemonTypeColor } from '@/lib/models/colors';
 
 const props = defineProps<{
-  type: string;
+  type: PokemonType;
 }>();
 
 const typeColor = getPokemonTypeColor(props.type);

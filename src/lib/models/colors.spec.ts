@@ -26,15 +26,7 @@ describe('Pokemon color utilities', () => {
   it('should return correct color class for known type', () => {
     expect(getPokemonTypeColor('fire')).toBe(POKEMON_TYPE_COLORS.fire);
     expect(getPokemonCardColor('water')).toBe(POKEMON_CARD_COLORS.water);
-  });
-
-  it('should be case-insensitive', () => {
-    expect(getPokemonTypeColor('Fire')).toBe(POKEMON_TYPE_COLORS.fire);
-    expect(getPokemonCardHoverColor('WATER')).toBe(POKEMON_CARD_HOVER_COLORS.water);
-  });
-
-  it('should fallback to normal for unknown type', () => {
-    expect(getPokemonTypeColor('???')).toBe(POKEMON_TYPE_COLORS.normal);
-    expect(getPokemonTypeGradient('invalid')).toBe(POKEMON_TYPE_GRADIENTS.normal);
+    expect(getPokemonCardHoverColor('water')).toBe(POKEMON_CARD_HOVER_COLORS.water);
+    expect(getPokemonTypeGradient('grass')).toBe(POKEMON_TYPE_GRADIENTS.grass);
   });
 });
